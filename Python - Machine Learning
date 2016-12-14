@@ -1,0 +1,58 @@
+### PRINCIPAL COMPONENTS ANALYSIS + LINEAR REGRESSION
+
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as sm
+from sklearn import decomposition
+from matplotlib import pyplot as plt
+a0=pd.read_csv('DadosTeseLogit.csv',sep=',',header=0)
+a=a0
+a=a.ix[:,0:30]
+a.skew()
+a.corr()
+k=29
+pca=decomposition.PCA(n_components=k)
+fa=decomposition.FactorAnalysis(a)
+fa.score
+u=pca.fit_transform(a,y=None)
+pca.fit(a)
+pca.explained_variance_ratio_
+z=[float(i) for i in pca.explained_variance_ratio_]
+z
+pca.explained_variance_ratio_
+for i in range(0,4):
+    print("%.2f" % z[i])
+pca.score_samples(a)
+pca.fit_transform(a)
+pca.fit(a)
+pca.components_
+pca.transform(a)
+plt.plot(pca.components_[0])
+z2=pca.inverse_transform(u)
+z2.shape
+x=np.transpose(z2)
+x=z2[:,0:4]
+x_test=x[10:20,:]
+
+y=np.array(a0[[29]])
+y=[item for sublist in y for item in sublist]
+len(y)
+x
+
+plt.plot(y)
+pca.explained_variance_ratio_
+linear=sm.OLS(y,x).fit()
+
+pca.explained_variance_ratio_
+plt.plot(z,marker='o',linestyle='--',color='r')
+plt.xlabel('Components')
+plt.ylabel('Variance Explained')
+plt.title('Principal Components Analysis')
+plt.show()
+linear.summary()
+
+linear.predict(x_test)
+np.array(y[10:20])
+
+1-np.mean(abs(linear.predict(x_test)-np.array(y[10:20])))
+
