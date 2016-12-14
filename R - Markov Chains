@@ -1,0 +1,45 @@
+set.seed(1)
+k<-sample(seq(from = 1, to = 5, by = 1), size = 10, replace = TRUE)
+edges0<-c(k[-1],c(k[-10:-2]))
+require(DiagrammeR)
+o<-cbind(k,edges0)
+kk<-data.frame(o)
+
+d<-c(k,edges0)
+d
+1/dim(data.frame(which(d==4)))[[1]]
+
+k7<-function(j=1:5)
+{return(round(1/dim(data.frame(which(d==j)))[[1]],digits=2))}
+conn<-lapply(d,k7)
+d
+data.frame(conn)
+b<-c(rep(8,10))
+b
+edges <-create_edges(
+        from = kk[,1],
+        to = kk[,2],
+        rel=conn,
+        length=c(rep(120,20)),
+        color = "black"
+        )
+
+nodes<-create_nodes(label=TRUE,
+    style = "filled",
+    nodes = 1:max(k),
+    type = c(1:max(k)))
+
+render_graph(
+    create_graph(edges_df = edges,nodes_df=nodes),
+    output = "visNetwork")
+dim(data.frame(k))[[1]]
+k
+io<-data.frame(rep(list(c(1:5)),10))
+io
+replace(io[[10]],k[[10]],99)
+
+k9<-function(u=1:10)
+{return(replace(io[[u]],k[[u]],99))}
+
+xx<-lapply(io,k9)
+xx
