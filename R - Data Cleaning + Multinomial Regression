@@ -1,0 +1,116 @@
+closeAllConnections()
+rm(list=ls())
+setwd("/Volumes/16 DOS/R_nbs")
+require(foreign)
+require(nnet)
+
+logitML<-read.csv("questao1.csv",sep=";",header=TRUE,fileEncoding="latin1")
+dim(logitML)
+head(logitML)
+summary(logitML)
+head(logitML,2)
+sum(is.na(logitML[,2]))
+apply(is.na(logitML),2,sum)
+
+unique(logitML$Avaliação.de.desempenho)
+c(unique(logitML$Avaliação.de.desempenho))
+logitML$Avaliação.de.desempenho<-factor(logitML$Avaliação.de.desempenho, labels =c(unique(logitML$Avaliação.de.desempenho)))
+logitML$Avaliação.de.desempenho<-as.numeric(logitML$Avaliação.de.desempenho)
+
+unique(logitML$Sexo)
+logitML$Sexo<-factor(logitML$Sexo, labels = c(0,1))
+logitML$Sexo<-as.numeric(logitML$Sexo)
+
+
+c(unique(logitML$Área))
+logitML$Área<-factor(logitML$Área, labels =c(unique(logitML$Área)))
+logitML$Área<-as.numeric(logitML$Área)
+
+# WORK REPLACE "," por "."
+head(logitML$Turnover.mercado)
+head((as.numeric(logitML$Turnover.mercado)+1)/100)
+# OR
+logitML$Turnover.mercado<-as.numeric(gsub("\\,",".",factor(logitML$Turnover.mercado)))
+
+# WORK TIRAR R$
+head(logitML$Salário.mensal.médio)
+head(factor(logitML$Salário.mensal.médio))
+f1<-gsub('[R$ ]','',factor(logitML$Salário.mensal.médio))
+head(f1)
+head(f2<-gsub("\\.","",f1))
+logitML$Salário.mensal.médio<-as.factor(f2)
+names(logitML)
+
+# WORK DATAS PEGAR ANO
+head(logitML$Data.de.nascimento)
+p1<-as.Date(logitML$Data.de.nascimento,"%d/%m/%Y")
+p2<-format(p1,'%Y')
+logitML$Data.de.nascimento<-as.numeric(p2)
+
+head(logitML$Data.de.admissão)
+p12<-as.Date(logitML$Data.de.admissão,"%d/%m/%Y")
+p22<-format(p12,'%Y')
+logitML$Data.de.admissão<-as.numeric(p22)
+
+logitML$Data.de.nascimento
+p123<-as.Date(logitML$Data.de.nascimento,"%d/%m/%Y")
+p223<-format(p1,'%Y')
+logitML$Data.de.nascimento<-as.numeric(p223)
+
+logitML$X<-NULL
+
+cor(logitML[,c(1,2,3,4,5,6,7,9,10)])
+
+par(mfrow=c(3,4))
+for (i in c(1,2,3,4,5,6,7,9,10,11,12,14)){
+    hist(logitML[,i],col="green",main=names(logitML)[i])
+    }
+
+#TESTE T
+t.test(logitML$Desligamento[logitML$Ex.trainee==0],logitML$Desligamento[logitML$Ex.trainee==1])
+par(mfrow=c(1,1))
+dim(logitML)
+
+for (i in c(1,2,3,4,5,6,7,9,10,11,12,13,14)){print(c(i,mean(logitML[c(which(logitML$Desligamento==0)),i])-
+        mean(logitML[c(which(logitML$Desligamento==1)),i])))
+    }
+
+dim(logitML)
+for (i in c(1:14)){
+  logitML[,i]<-as.numeric(logitML[,i])}
+cor(logitML)[,1]
+
+x_train<-logitML[,c(6,7,10)][1:2000,]
+y_train<-logitML[,1][1:2000]
+x<-data.frame(cbind(x_train,y_train))
+write.csv(x,file="questaox.csv")
+?write.csv
+head(logitML)
+y_train
+for (i in c(1:4)){
+  x[i]<-lapply(x[i], function(x) (x-min(x))/(max(x)-min(x)))}
+boxplot(x)
+test<-multinom(y_train~x_train[,1]+x_train[,2]+x_train[,3],data=x,MaxNWts=1000,maxit=300000)
+summary(test)
+summary(test)$coefficients
+# CROSS VALIDATION
+bb<-as.numeric(predict(test,x))-y_train
+length(which(bb==0))/length(bb)
+
+length(logitML[,1])
+x_train<-logitML[,c(6,7,10)][2000:2500,]
+y_train<-data.frame(logitML[,1])[2000:2500,]
+x<-data.frame(cbind(x_train,y_train))
+
+### TIRAR O Y
+pred<-predict(test,x_train)
+pred
+head(x)
+sum(is.na(x$y_train))
+x$y_train
+
+x$y_train
+as.numeric(pred)
+cc<-as.numeric(pred[1:9])-as.numeric(x$y_train[1:9])
+cc
+length(which(cc==0))/length(cc)
