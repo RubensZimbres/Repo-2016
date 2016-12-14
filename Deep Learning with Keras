@@ -1,0 +1,45 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import theano
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.optimizers import SGD
+model = Sequential()
+model.add(Dense(10, input_dim=2, init='uniform'))
+model.add(Activation('tanh'))
+model.add(Dropout(0.5))
+model.add(Dense(10, init='uniform'))
+model.add(Activation('tanh'))
+model.add(Dropout(0.5))
+model.add(Dense(2, init='uniform'))
+model.add(Activation('softmax'))
+sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+model.compile(loss='categorical_crossentropy',
+              optimizer=sgd,metrics=['accuracy'])
+
+aa=pd.read_csv('DadosTeseLogit.csv',sep=',',header=0)
+df=aa[0:98]
+df2=aa[60:90]
+y=np.array(df[[30]])
+y_train=[item for sublist in y for item in sublist]
+y_train=pd.get_dummies(y_train)
+x=np.array(df)
+x1=x.T
+x2=[x1[18],x1[29]]
+x3=np.array(x2).T
+X_train=x3
+
+y2=np.array(df2[[30]])
+y_train2=[item for sublist in y2 for item in sublist]
+y_train20=pd.get_dummies(y_train2)
+x0=np.array(df2)
+x10=x0.T
+x20=[x10[18],x10[29]]
+x30=np.array(x20).T
+X_test=x30
+
+model.fit(X_train, y_train,nb_epoch=100,batch_size=16)
+
+y_pred=model.predict_classes( X_test, batch_size=32, verbose=1)
+y_pred-np.array([float(i) for i in y])
