@@ -1,0 +1,93 @@
+closeAllConnections()
+rm(list=ls())
+library(foreign)
+library(mapproj)
+library(ggplot2)
+setwd("/Volumes/16 DOS/R_nbs")
+accidents<-read.dbf("accident.dbf")
+head(accidents)
+accidents <- subset(accidents, LONGITUD!=999.99990 &  LONGITUD!=888.88880 & LONGITUD!=777.77770)
+which(names(accidents)=="RAIL")
+str(accidents[,-c(23,24,41)])
+hist(accidents$FATALS,col="green")
+# REMOVE ALASKA HAWAII
+cont_us_accidents<-subset(accidents, STATE!=2 & STATE!=15)
+county_map_data<-map_data("county")
+state_map <- map_data("state")
+ggplot() + 
+  #Add county borders:
+  geom_polygon(data=county_map_data, aes(x=long,y=lat,group=group), 
+               colour = alpha("grey", 1/4), size = 0.2, fill = "white")+
+  #Add state borders:
+  geom_polygon(data = state_map, aes(x=long,y=lat,group=group), 
+               colour = "grey", fill = "white") +
+  #Add points (one per fatality):
+  geom_point(data=cont_us_accidents, aes(x=LONGITUD, y=LATITUDE), 
+             alpha=0.04, size=cont_us_accidents$PERSONS/5, col="blue") +
+  #Adjust the map projection
+  coord_map("albers",lat0=38, lat1=45) +
+  #Add a title:
+  ggtitle("Traffic Accidents in 2015 - USA") +
+  #Adjust the theme:
+  theme_classic() +
+  theme(panel.border = element_blank(),
+        axis.text = element_blank(),
+        line = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size=18, family="Avenir Next",
+                                  colour = "red"))
+head(accidents)
+cbind(accidents$STATE,accidents$PERSONS)
+
+ff=c()
+f=c()
+for (i in 1:max(cont_us_accidents$STATE)){
+  ff[[i]]<-append(f,sum(subset(cont_us_accidents,cont_us_accidents$STATE==i)$PERSONS),after=length(f))
+}
+ff
+#RGB
+g0<-c()
+g=c()
+for (i in 1:length(ff)){
+  g0[[i]]<-append(g,(ff[[i]]-min(ff))/(max(ff)-min(ff)),after=length(g))}
+
+s<-which(g0==0)
+g0<-g0[-s]
+g0<-g0+.4
+g0[g0>1]<-1
+
+f0<-c()
+f1<-c()
+for (i in 1:length(unique(state_map$region))){
+  f1[[i]]<-append(f0,length(which(state_map$region==unique(state_map$region)[[i]])),after = length(f0))
+}
+rep(g0[[1]],f1[[1]])
+length(g0)
+h0<-c()
+h1<-c()
+for (i in 1: length(g0)){
+  h1[[i]]<-append(h0,rep(g0[[i]],f1[[i]]),after=length(h0))
+}
+
+cbind(cont_us_accidents$STATE,cont_us_accidents$PERSONS)
+max(cont_us_accidents$PERSONS)
+cont_us_accidents$STATE
+sum(cont_us_accidents$PERSONS[which(cont_us_accidents$STATE==40)])
+which(unique(state_map$region)=="texas")
+
+h2<-unlist(h1)
+ggplot(data=cont_us_accidents) + 
+  #Add county borders:
+  geom_polygon(data=county_map_data, aes(x=long,y=lat,group=group), colour = alpha("black", 1/4), size = 0.2, fill = "yellow")+
+  #Add state borders:
+  geom_polygon(data = state_map, aes(x=long,y=lat,group=group), colour = "black", fill = rgb(0,h2,0))+
+  ggtitle("Number of People Involved in Traffic Accidents in 2015 - USA") +
+  #Adjust the theme:
+  scale_colour_gradient(limits=c(1000,5000),low=rgb(0,0,0),high=rgb(0,1,0))+
+  theme_classic() +
+  theme(panel.border = element_blank(),
+        axis.text = element_blank(),
+        line = element_blank(),
+        axis.title = element_blank(),
+        plot.title = element_text(size=12, face="bold",family="Avenir Next",colour = "black"))+
+  coord_fixed(1.3)
