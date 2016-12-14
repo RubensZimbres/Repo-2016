@@ -1,0 +1,90 @@
+from keras.layers import Input, Dense
+from keras.models import Model
+from keras.datasets import mnist
+import numpy as np
+import matplotlib.pyplot as plt
+from keras.callbacks import ModelCheckpoint
+from sklearn.preprocessing import MinMaxScaler
+
+filename = "ZarathustraSmall.txt"
+raw_text = open(filename).read()
+raw_text = raw_text.lower()
+# create mapping of unique chars to integers
+chars = sorted(list(set(raw_text)))
+char_to_int = dict((c, i) for i, c in enumerate(chars))
+# summarize the loaded data
+n_chars = len(raw_text)
+n_vocab = len(chars)
+print("Total Characters: ", n_chars)
+print("Total Vocab: ", n_vocab)
+# prepare the dataset of input to output pairs encoded as integers
+zz=[[char_to_int[char] for char in raw_text[3320:3520]]]
+len(zz)
+x_train=np.array(zz)
+x_train = x_train.astype('float32')
+x_train=x_train/float(n_vocab)
+
+encoding_dim = 3  # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
+input_img = Input(shape=(200,))
+encoded = Dense(encoding_dim, activation='relu')(input_img)
+decoded = Dense(200, activation='sigmoid')(encoded)
+autoencoder = Model(input=input_img, output=decoded)
+encoder = Model(input=input_img, output=encoded)
+encoded_input = Input(shape=(encoding_dim,))
+decoder_layer = autoencoder.layers[-1]
+decoder = Model(input=encoded_input, output=decoder_layer(encoded_input))
+autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
+
+filepath="autoencoder-{loss:.4f}.hdf5"
+checkpoint = ModelCheckpoint(filepath, monitor='binary_crossentropy', verbose=1, save_best_only=False)
+
+autoencoder.summary()
+autoencoder.fit(x_train, x_train,
+                nb_epoch=100,
+                batch_size=16,
+                shuffle=True,
+                validation_data=(x_train, x_train),callbacks=[checkpoint],verbose=0)
+
+filename = "autoencoder-0.6297.hdf5"
+autoencoder.load_weights(filename)
+autoencoder.compile(loss='mean_squared_error', optimizer='adam')
+
+
+encoded_imgs = encoder.predict(x_train)
+decoded_imgs = decoder.predict(encoded_imgs)
+
+n = 1  # how many digits we will display
+plt.figure(figsize=(20, 4))
+for i in range(n):
+    # display original
+    ax = plt.subplot(2, n, i + 1)
+    plt.imshow(x_train[i].reshape(10, 20))
+    plt.title("ORIGINAL TEXT")
+    plt.gray()
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+
+    # display reconstruction
+    ax = plt.subplot(2, n, i + 1 + n)
+    plt.imshow(decoded_imgs[i].reshape(10, 20))
+    plt.title("RECONSTRUCTED TEXT")
+    plt.gray()
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+plt.show()
+
+print("Accuracy=",1-np.mean(abs(x_train-decoded_imgs)),'\n')
+
+s=[]
+int_to_char = dict((i, c) for i, c in enumerate(chars))
+
+for i in range(0,x_train.shape[1]):
+    result = int_to_char[round(x_train[0][i]*n_vocab)]
+    s.append(result)
+print("Message:",'\n',"\"", ''.join(s), "\"",'\n')
+
+s1=[]
+for i in range(0,x_train.shape[1]):
+    result2 = int_to_char[round(decoded_imgs[0][i]*n_vocab)]
+    s1.append(result2)
+print("Decoded Message:",'\n',"\"", ''.join(s1), "\"")
