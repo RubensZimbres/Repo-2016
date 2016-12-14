@@ -1,0 +1,19 @@
+library(h2o)
+h2o.init()
+setwd("/Volumes/16 DOS/R_nbs")
+train<-h2o.importFile("mnist_train2.csv")
+test<-h2o.importFile("mnist_test2.csv")
+target=t(train)[1,]
+target1<-as.h2o(target)
+ex=t(train)[2:785,]
+ex1<-as.h2o(ex)
+train.hex<-as.h2o(train)
+test.hex<-as.h2o(test)
+
+model<-h2o.deeplearning(x=2:785,y=1,training_frame=train.hex,activation = "RectifierWithDropout",epochs=100)
+
+pred<-h2o.predict(model,test.hex)
+t(t(test)[1,])
+pred2<-h2o.floor(pred2,t(t(test)[1,]))
+diff<-as.data.frame(pred2)-as.data.frame(t(t(test)[1,]))
+print(c("Accuracy=",length(which(diff==0))/dim(test)[[1]]))
