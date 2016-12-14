@@ -1,0 +1,36 @@
+require(foreign)
+require(nnet)
+require(ggplot2)
+require(reshape2)
+setwd("/Volumes/16 DOS/R_nbs")
+m<-read.csv("DadosTeseLogit3.csv",sep=",",header=TRUE,fileEncoding="latin1")
+head(m,2)
+with(m,table(c0_dados,selected))
+hist(m$c0_dados,col="green")
+hist(m$selected,col="green")
+hist(m$c0_recomend,col="green")
+cor(m)
+
+
+m<-m[,which(cor(m)[,31]>0.5)]
+head(m)
+m0<-m[,-4]
+t<-paste(names(m0),collapse="+")
+form<-formula(paste("selected~",t))
+form
+head(m)
+range01 <- function(x){(x-min(x))/(max(x)-min(x))}
+m[1]
+
+for i in (1,dim(m)[[2]]):{
+  m[i]<-lapply(m[1], range01)
+test<-multinom(form,data=m[10:98,],MaxNWts=3000,maxit=15000)
+summary(test)
+summary(test)$coefficients
+pred<-predict(test,m[1:9,])
+pred
+m$selected[1:9]
+as.numeric(pred)
+cc<-as.numeric(pred)-as.numeric(m$selected[1:9])
+cc
+length(which(cc==0))/length(cc)
