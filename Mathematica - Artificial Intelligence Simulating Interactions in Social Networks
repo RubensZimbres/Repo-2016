@@ -1,0 +1,309 @@
+SOCIAL NETWORK ANALYSIS USING ARTIFICIAL INTELLIGENCE TO SIMULATE INTERACTIONS IN WOLFRAM MATHEMATICA
+
+1) PARAMETERS TO FIND COMMUNITIES WERE ADJUSTED TO AN OPTIMUM
+2) COMMUNITIES CAN BE EASILY ANALYZED INDIVIDUALLY
+3) YOU CAN VISUALIZE THE CONNECTIONS OF EACH INDIVIDUAL
+4) WEAK LINKS BETWEEN TWO SUSPECTS CAN EASILY BE SEEN
+5) YOU CAN SEE IMPORTANT NODES (PEOPLE WITH MORE CONNECTIONS - COMMUNITY LEADERS)
+6) YOU CAN SEE THE HIERARCHY OF THE SOCIAL NETWORK
+7) THE SOFTWARE SIMULATES FUTURE INTERACTIONS IN THE SOCIAL NETWORK WITH THE RULE OF MY THESIS, THAT IS PROVEN TO WORK  RELIABLY WITH REAL DATA. UNSTRUCTURED DATA CAN BE USED DO ADJUST THE CELLULAR AUTOMATA MODEL PARAMETERS.
+8) YOU CAN CHOOSE BETWEEN AN AMORPHOUS CELLULAR AUTOMATA (Tinder),  A CELLULAR AUTOMATA BASED ON PREVIOUS RELATIONSHIPS (Facebook) OR REAL LIFE, THAT IS BASED IN PREVIOUS RELATIONSHIPS AND FRIENDS OF FRIENDS.
+
+Clear["Global`*"]
+SetDirectory[$UserDocumentsDirectory];
+
+emails01=Sort[Drop[Import["EmailData.xlsx"][[1]],1]];emails=emails01;
+listacz=emails[[#]][[1]]->emails[[#]][[2]]&/@Table[a,{a,1,Dimensions[emails][[1]],1}];zi=Graph[listacz,VertexLabels->"Name",ImageSize->600];suspects08=DialogInput[DynamicModule[{name1="",name2="",name3="",name4="",name5="",name12="",name22="",name32="",name42="",name52=""},Column[{"ENTER SUSPECTS NAME BELOW SAME FORMAT AS EmailData.xlsx",,
+InputField[Dynamic[name1],String,FieldSize->15],InputField[Dynamic[name2],String,FieldSize->15],InputField[Dynamic[name3],String,FieldSize->15],InputField[Dynamic[name4],String,FieldSize->15],InputField[Dynamic[name5],String,FieldSize->15],
+InputField[Dynamic[name12],String,FieldSize->15],InputField[Dynamic[name22],String,FieldSize->15],InputField[Dynamic[name32],String,FieldSize->15],InputField[Dynamic[name42],String,FieldSize->15],InputField[Dynamic[name52],String,FieldSize->15],,"Developed by The One",
+ChoiceButtons[{DialogReturn[{If[name1=="",0,{name1}],If[name2=="",0,{name2}],If[name3=="",0,{name3}],If[name4=="",0,{name4}],If[name5=="",0,{name5}],If[name12=="",0,{name12}],If[name22=="",0,{name22}],If[name32=="",0,{name32}],If[name42=="",0,{name42}],If[name52=="",0,{name52}]}],DialogReturn[]}]}]]];suspects=InputForm[DeleteCases[Flatten[suspects08],0]];
+Mouseover[zipp=Graph[Flatten[{Button[If[Position[suspects,#]!={},Style[#,Red],Style[#,LightGray]],Speak[#]]&/@VertexList[zi]}],listacz,VertexLabels->"Name",ImageSize->900,VertexSize-> Thread[VertexList[zi]->1.4  Rescale[DegreeCentrality[zi]]],PlotLabel-> "MOUSE OVER TO FIND COMMUNITIES - CLICK TO SPEAK NAME"],HighlightGraph[zipp, Subgraph[zipp,#]&/@FindGraphCommunities[zipp,Method->"Centrality"], VertexLabels->"Name"]]
+
+COMMUNITIES
+CommunityGraphPlot[zipp,FindGraphCommunities[zipp,Method->"Centrality"],CommunityBoundaryStyle->Dashed,CommunityRegionStyle->Green,PlotLabel->"COMMUNITIES",PlotLegends->All,CommunityLabels->Placed[Table[j,{j,1,Dimensions[FindGraphCommunities[zipp,Method->"Centrality"]][[1]],1}],Below]]
+
+NUMBER OF CONNECTIONS OF EACH INDIVIDUAL
+BarChart[SortBy[{VertexList[zi],DegreeCentrality[zi]}\[Transpose],Last][[#]][[2]]&/@Table[ju,{ju,1,Dimensions[VertexList[zi]][[1]],1}]//Reverse,BarOrigin->Left,ChartLabels->{SortBy[{VertexList[zi],DegreeCentrality[zi]}\[Transpose],Last][[#]][[1]]&/@Table[ju,{ju,1,Dimensions[VertexList[zi]][[1]],1}]//Reverse},ChartElementFunction->ChartElementDataFunction["SegmentScaleRectangle","Segments"->12,"ColorScheme"->"BrightBands"],BarSpacing->Large,ChartStyle->"Pastel",ImageSize->700,PlotLabel->"NUMBER OF CONNECTIONS"]
+
+ANALYZING EACH COMMUNITY INDIVIDUALLY
+c=FindGraphCommunities[zipp,Method->"Centrality"]
+{{Amanda,Patrick,Paul,Boehner,Hillary,JPMorgan,Odierno,Clinton,Michelle,Osama,Franz,McCain,Mark,Patricia,Pope},{Brittan,Kimberly,Paula,TheOne,Jennings,Richard,Meg,Michael,Tedd},{Ben,Yellen},{Cailin,Fred},{DalaiLama}}
+a=Subgraph[zipp,FindGraphCommunities[zipp,Method->"Centrality"][[#]]]&/@Table[j,{j,1,Dimensions[FindGraphCommunities[zipp,Method->"Centrality"]][[1]],1}];
+y=DeleteCases[Flatten[suspects08],0];z=Flatten[Position[c,y[[#]]]]&/@Table[i,{i,1,Dimensions[y][[1]],1}];w=Union[z[[#]][[1]]&/@Table[i,{i,1,Dimensions[z][[1]],1}]];
+
+DialogInput[Column[{Text[Style["CHECK COMMUNITIES",Bold,Large]],,Text[Style[w,Bold,Large]],
+,DefaultButton[]}]];
+ciclosS=DialogInput[DynamicModule[{name19=""},Column[{"WE WILL FORECAST FUTURE INTERACTIONS OF THE SOCIAL NETWORK",,"TELL US, IN INTEGERS, HOW MANY WEEKS YOU WANT TO SIMULATE",,
+InputField[Dynamic[name19],Number,FieldSize->15],
+ChoiceButtons[{DialogReturn[{name19}],DialogReturn[]}]}]]][[1]];cycle=InputForm[ciclosS][[1]];
+choice=DialogInput[Column[{"CHOOSE AN OPTION:",,RadioButtonBar[Dynamic[xg],{"AMORPHOUS CELLULAR AUTOMATA - Tinder","CELLULAR AUTOMATA BASED ON PREVIOUS RELATIONSHIPS - Facebook","CELLULAR AUTOMATA BASED ON SIMILARITY","REAL LIFE - PREVIOUS RELATIONSHIPS AND FRIENDS OF FRIENDS"},Appearance -> "Vertical"],Button["Ok",DialogReturn[xg],ImageSize->Automatic]}]]
+
+CELLULAR AUTOMATA BASED ON SIMILARITY
+Clusters inside a community.
+{#,a[[#]]}&/@Table[k,{k,1,Dimensions[a][[1]],1}]
+{{1,},{2,},{3,},{4,},{5,}}
+
+Manipulate[Mouseover[zio=Graph[
+a[[Community]],VertexLabels->"Name",ImageSize->600,VertexStyle->Flatten[{If[Flatten[Position[suspects,#]]!={},#->Red,#->LightGray]&/@VertexList[a[[Community]]]}],VertexSize-> Thread[VertexList[zi]->.4 Rescale[DegreeCentrality[zi]]]],HighlightGraph[zio, Subgraph[zio,#]&/@FindGraphCommunities[zio],EdgeStyle->Arrowheads[.08], VertexLabels->"Name"]],{Community,Table[h,{h,1,Dimensions[c][[1]],1}]}]
+Manipulate[Mouseover[zio = Graph[a[[Community]], VertexLabels -> "Name", 
+     ImageSize -> 600, VertexStyle -> 
+      Flatten[{(If[Flatten[Position[suspects, #1]] != {}, #1 -> Red, 
+           #1 -> LightGray] & ) /@ VertexList[a[[Community]]]}], 
+     VertexSize -> Thread[VertexList[zi] -> 
+        0.4*Rescale[DegreeCentrality[zi]]]], HighlightGraph[zio, 
+    (Subgraph[zio, #1] & ) /@ FindGraphCommunities[zio], 
+    EdgeStyle -> Arrowheads[0.08], VertexLabels -> "Name"]], 
+  {Community, {1, 2, 3, 4, 5}}]
+
+
+SUSPECTS ACTIVITY
+here you can find the nodes that connect two suspects communities, the link between two suspects. The weak ties of Granovetter.
+
+listacz2={emails[[#]][[1]],emails[[#]][[2]]}&/@Table[a,{a,1,Dimensions[emails][[1]],1}];listacz3=emails[[#]][[1]]->emails[[#]][[2]]&/@Table[a,{a,1,Dimensions[emails][[1]],1}];ft2[gg2_]:=If[listacz2[[#]][[1]]==y[[gg2]],listacz2[[#]][[1]]->listacz2[[#]][[2]],If[listacz2[[#]][[2]]==y[[gg2]],listacz2[[#]][[1]]->listacz2[[#]][[2]],{}]]&/@Table[h,{h,1,Dimensions[listacz2][[1]],1}];r=Flatten[ft2/@Table[h,{h,1,Dimensions[y][[1]],1}]]
+{Boehner->Odierno,Clinton->Odierno,Odierno->Cailin,Odierno->JPMorgan,Odierno->McCain,Odierno->Osama,Odierno->Osama,Odierno->Pope,TheOne->Odierno}
+r1=Graph[r,VertexLabels->"Name",ImageSize->600];Mouseover[zipp9=Graph[Flatten[
+{Button[If[Position[y,#]!={},Style[#,Red],Style[#,LightGray]],Speak[#]
+]&/@VertexList[r1]}],r,VertexLabels->"Name",ImageSize->600,EdgeStyle->Arrowheads[.04],VertexSize-> Thread[VertexList[r1]->.8 Rescale[DegreeCentrality[r1]]],PlotLabel-> "SUSPECTS ACTIVITY"],HighlightGraph[zipp9, Subgraph[zipp9,#]&/@FindGraphCommunities[zipp9], VertexLabels->"Name"]]
+
+INDIVIDUAL INTERACTIONS
+DynamicModule[{ll=Sort[VertexList[zi]],cl=Sort[VertexList[zi]],n},
+{PopupView[ll,Dynamic[n]],Dynamic[y5=Sort[VertexList[zi]][[n]];z5=Flatten[If[listacz2[[#]][[1]]==y5,listacz2[[#]][[1]]->listacz2[[#]][[2]],If[listacz2[[#]][[2]]==y5,listacz2[[#]][[1]]->listacz2[[#]][[2]],{}]]&/@Table[h,{h,1,Dimensions[listacz2][[1]],1}]];za5=Graph[z5,VertexLabels->"Name",ImageSize->600];
+Mouseover[zipp7=Graph[Flatten[
+{Button[If[Position[suspects,#]!={},Style[#,Red],Style[#,LightGray]],Speak[#]
+]&/@VertexList[za5]}],z5,VertexLabels->"Name",ImageSize->400,EdgeStyle->Arrowheads[.08],VertexSize-> Thread[VertexList[za5]->.3Rescale[DegreeCentrality[za5]]],PlotLabel-> "INDIVIDUAL COMMUNITIES"],
+HighlightGraph[zipp7, Subgraph[zipp7,#]&/@FindGraphCommunities[zipp7], VertexLabels->"Name"]]
+]}]
+{BoxData[Amanda],Graph[{VertexList[Graph[Table[(If[listacz2[[#1]][[1]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],If[listacz2[[#1]][[2]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],{}]]&)[h],{If[listacz2==zi,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],If[listacz2[[{h,1,{}[[1]],1}]][[2]]==y5,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->600]]},Table[(If[listacz2[[#1]][[1]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],If[listacz2[[#1]][[2]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],{}]]&)[h],{If[listacz2==zi,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],If[listacz2[[{h,1,{}[[1]],1}]][[2]]==y5,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->400,EdgeStyle->Arrowheads[0.08],VertexSize->VertexList[Graph[Table[(If[listacz2[[#1]][[1]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],If[listacz2[[#1]][[2]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],{}]]&)[h],{If[listacz2==zi,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],If[listacz2[[{h,1,{}[[1]],1}]][[2]]==y5,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->600]]->0.3 Rescale[DegreeCentrality[Graph[Table[(If[listacz2[[#1]][[1]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],If[listacz2[[#1]][[2]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],{}]]&)[h],{If[listacz2==zi,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],If[listacz2[[{h,1,{}[[1]],1}]][[2]]==y5,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->600]]],PlotLabel->INDIVIDUAL COMMUNITIES]}
+f=Flatten[Position[VertexList[zi],emails[[#]][[1]]]&/@Table[h,{h,1,Dimensions[emails][[1]],1}]];
+g=Flatten[Position[VertexList[zi],emails[[#]][[2]]]&/@Table[h,{h,1,Dimensions[emails][[1]],1}]];
+p=f[[#]]->g[[#]]&/@Table[h,{h,1,Dimensions[g][[1]],1}];
+listacz27={f[[#]],g[[#]]}&/@Table[h,{h,1,Dimensions[g][[1]],1}];
+
+SOCIAL NETWORK CLASSIFIED IN HIERARCHY AND IDENTIFICATION OF IMPORTANT NODES
+zs=Count[Flatten[emails],VertexList[zi][[#]]]&/@Table[h,{h,1,Dimensions[VertexList[zi]][[1]],1}];
+Manipulate[Mouseover[
+LayeredGraphPlot[p,VertexLabeling->True,PlotLabel->"IMPORTANT NODES - INDIVIDUALS WITH MORE CONNECTIONS - MOUSE OVER TO SEE SUSPECTS",VertexRenderingFunction->({If[Count[Flatten[emails],VertexList[zi][[#2]]]>=ft,Yellow,White],EdgeForm[Black],Disk[#,.4],Black,Text[
+Style[VertexList[zi][[#2]],Medium],#1]}&),SelfLoopStyle->All,ImageSize->800],
+
+LayeredGraphPlot[p,VertexLabeling->True,PlotLabel->"SUSPECTS IN RED",VertexRenderingFunction->({If[Position[suspectsok,VertexList[zi][[#2]]]=={},White,Red],EdgeForm[Black],Disk[#,.4],Black,Text[
+Style[VertexList[zi][[#2]],Medium],#1]}&),SelfLoopStyle->All,ImageSize->800]],{{ft,.64 Max[zs] ,"Threshold Number of Connections More Than"},0,Max[zs],1,Appearance->"Open"}]
+
+Manipulate[Mouseover[LayeredGraphPlot[p, VertexLabeling -> True, 
+    PlotLabel -> "IMPORTANT NODES - INDIVIDUALS WITH MORE CONNECTIONS - MOUSE 
+OVER TO SEE SUSPECTS", VertexRenderingFunction -> 
+     ({If[Count[Flatten[emails], VertexList[zi][[#2]]] >= ft, Yellow, White], 
+       EdgeForm[Black], Disk[#1, 0.4], Black, 
+       Text[Style[VertexList[zi][[#2]], Medium], #1]} & ), 
+    SelfLoopStyle -> All, ImageSize -> 800], LayeredGraphPlot[p, 
+    VertexLabeling -> True, PlotLabel -> "SUSPECTS IN RED", 
+    VertexRenderingFunction -> 
+     ({If[Position[suspectsok, VertexList[zi][[#2]]] == {}, White, Red], 
+       EdgeForm[Black], Disk[#1, 0.4], Black, 
+       Text[Style[VertexList[zi][[#2]], Medium], #1]} & ), 
+    SelfLoopStyle -> All, ImageSize -> 800]], 
+  {{ft, 8.96, "Threshold Number of Connections More Than"}, 0, 14, 1, 
+   Appearance -> "Open"}]
+
+AMORPHOUS CELLULAR AUTOMATA BASED ON MY THESIS RULE THAT SIMULATES HUMAN INTERACTIONS TO FORECAST THE FUTURE
+BELOW,INDIVIDUALS ARE SPATIALLY POSITIONED FOLLOWING SOCIAL EUCLIDEAN DISTANCE AMONG THEM.COLOR OF CIRCLE IS MOOD (YELLOW CODE LINE BELOW,CUSTOMIZABLE USING METADATA AND UNSTRUCTURED DATA) AND SIZE OF CIRCLE IS NUMBER OF CONNECTIONS (SEE ALSO GRAPHIC ABOVE YELLOW DISKS). OVERLAPPING CIRCLES MEAN VERY SIMILAR PEOPLE. 
+
+IN THE AMORPHOUS CELLULAR AUTOMATA, EACH PERSON INTERACTS WITH TWO PEOPLE, THAT HE/SHE IS USED TO INTERACT IN THE PAST . THERE IS ALSO ROOM FOR A SMALL RANDOMNESS. YOU CAN SEE THE DENSITY OF SOCIAL NETWORK (MEAN EUCLIDEAN DISTANCE) AND THE OVERALL SATISFACTION OF THE NETWORK. YOU WILL NOTICE PEOPLE DEVELOP STRONG TIES AND SEGGREGATE OTHER PEOPLE, WHILE OTHERS WORK AS WEAK TIES, CONNECTING NETWORKS. ASSUME THAT ZERO IS SATISFIED AND 4 IS DISSATISFIED.
+
+TO USE METADATA AND UNSTRUCTURED DATA, ENTER THE PARAMETERS IN THE YELLOW CELL BELOW, FOLLOWING NAMES ORDER. The size of coded data Condinit must be same size of VertexList[zi].
+LESS CYCLES PRESENT BETTER MOOD HISTOGRAM.
+EXPLANATION OF CELLULAR AUTOMATA MODEL TYPES
+1) AMORPHOUS - Tinder: INDIVIDUALS CHOOSE TWO RANDOM NEIGHBORS TO INTERACT WITH
+2) CELLULAR AUTOMATA BASED ON PREVIOUS RELATIONSHIPS - Facebook: INDIVIDUALS INTERACT WITH PEOPLE THEY ARE USED TO
+3) CELLULAR AUTOMATA BASED ON SIMILARITY (OF UNSTRUCTURED DATA) 
+4) REAL LIFE: INDIVIDUALS INTERACT WITH PEOPLE THEY ARE USED TO AND FRIENDS OF FRIENDS
+
+VertexList[zi]
+{Amanda,Patrick,Ben,Paul,Boehner,Hillary,JPMorgan,Odierno,Brittan,Kimberly,Paula,TheOne,Cailin,Fred,Clinton,Michelle,DalaiLama,Osama,Franz,Yellen,McCain,Jennings,Richard,Mark,Patricia,Meg,Michael,Pope,Tedd}
+
+Condinit={0,0,1,1,4,4,4,3,2,1,1,0,1,3,3,1,4,2,3,4,3,1,1,0,2,1,3,1,0};
+Dimensions[VertexList[zi]][[1]]==Dimensions[Condinit][[1]]
+
+listacz2={emails[[#]][[1]],emails[[#]][[2]]}&/@Table[a,{a,1,Dimensions[emails][[1]],1}];listacz3=emails[[#]][[1]]->emails[[#]][[2]]&/@Table[a,{a,1,Dimensions[emails][[1]],1}];ft22[gg2_]:=If[listacz2[[#]][[1]]==y[[gg2]],{Position[VertexList[zi],listacz2[[#]][[1]]],Position[VertexList[zi],listacz2[[#]][[2]]]},If[listacz2[[#]][[2]]==y[[gg2]],{Position[VertexList[zi],listacz2[[#]][[1]]],Position[VertexList[zi],listacz2[[#]][[2]]]},{}]]&/@Table[h,{h,1,Dimensions[listacz2][[1]],1}]
+suspectsok=DeleteCases[Flatten[suspects08],0];
+dh=Partition[Flatten[ft22/@Table[g,{g,1,Dimensions[suspectsok][[1]],1}]],2];
+ah=Dimensions[CellularAutomaton[{2159062512564987644819455219116893945895958528152021228705752563807962227809675217601186,5,{{-1},{0},{1}}},Condinit,2]];
+jj[kk_]:=Flatten[If[listacz27[[#]][[1]]==kk,listacz27[[#]],If[listacz27[[#]][[2]]==kk,listacz27[[#]],{}]]&/@Table[h,{h,1,Dimensions[listacz27][[1]],1}]]
+oo1=jj/@Table[h,{h,1,Dimensions[VertexList[zi]][[1]],1}];
+oo=DeleteCases[oo1[[#]],#]&/@Table[h,{h,1,Dimensions[oo1][[1]],1}];
+fg={oo[[#]][[RandomInteger[{1,Dimensions[oo[[#]]][[1]]}]]]}&/@Table[h,{h,1,Dimensions[VertexList[zi]][[1]],1}];
+
+CELLULAR AUTOMATA BASED ON SIMILARITY
+Do[If[choice=="AMORPHOUS CELLULAR AUTOMATA - Tinder",aput={{RandomInteger[{-Dimensions[VertexList[zi]][[1]],-1}]},{0},{RandomInteger[{1,Dimensions[VertexList[zi]][[1]]}]}}&/@Table[g,{g,1,Dimensions[Condinit][[1]],1}],If[choice=="REAL LIFE - PREVIOUS RELATIONSHIPS AND FRIENDS OF FRIENDS",aput={{oo[[#]][[RandomInteger[{1,Dimensions[oo[[#]]][[1]]}]]]-Dimensions[VertexList[zi]][[1]]-1},{0},fg[[#]]}&/@Table[g,{g,1,Dimensions[Condinit][[1]],1}],If[choice=="CELLULAR AUTOMATA BASED ON PREVIOUS RELATIONSHIPS - Facebook",aput={fg[[#]]-Dimensions[VertexList[zi]][[1]]-1,{0},fg[[#]]}&/@Table[g,{g,1,Dimensions[Condinit][[1]],1}],
+
+aput={fg[[#]]-Dimensions[VertexList[zi]][[1]]-1,{0},fg[[#]]}&/@Table[g,{g,1,Dimensions[Condinit][[1]],1}];
+tyu=Table[t,{t,1,Dimensions[VertexList[zi]][[1]],1}];
+asj=Condinit;aput2=Partition[Flatten[aput],3];zee=Drop[aput2[[#]],{2}]&/@tyu;listaconjunta7=Insert[zee[[#]],#,2]&/@tyu;lista=Dimensions[Condinit]+1+listaconjunta7[[#]][[1]]&/@tyu;tuu=Drop[listaconjunta7[[#]],1]&/@tyu;tg[tau_]:=Insert[tuu[[#]],tau,1]&/@tyu;see=tg/@lista;Dimensions[see];listaconjunta=Partition[Flatten[see[[#]][[#]]&/@tyu],3];zeros=Flatten[Position[asj,0]];If[zeros=={},0,Dimensions[zeros];zeros1=Tuples[zeros,2];zeros2=Partition[zeros1,Dimensions[zeros][[1]]]];zeros3=zeros2[[#]][[RandomInteger[{1,Dimensions[zeros][[1]]}]]]&/@Table[o,{o,1,Dimensions[zeros][[1]],1}];zeros4=Flatten[Drop[zeros3[[#]],1]&/@Table[o,{o,1,Dimensions[zeros][[1]],1}]];zeros5=listaconjunta[[#]]&/@zeros;zeros6=Drop[zeros5[[#]],-1]&/@Table[j,{j,1,Dimensions[zeros][[1]],1}];zeros7=Insert[zeros6[[#]],zeros4[[#]],3]&/@Table[j,{j,1,Dimensions[zeros][[1]],1}];ones=Flatten[Position[asj,1]];If[ones=={},0,Dimensions[ones];ones1=Tuples[ones,2];ones2=Partition[ones1,Dimensions[ones][[1]]]];ones3=ones2[[#]][[RandomInteger[{1,Dimensions[ones][[1]]}]]]&/@Table[o,{o,1,Dimensions[ones][[1]],1}];ones4=Flatten[Drop[ones3[[#]],1]&/@Table[o,{o,1,Dimensions[ones][[1]],1}]];ones5=listaconjunta[[#]]&/@ones;ones6=Drop[ones5[[#]],-1]&/@Table[j,{j,1,Dimensions[ones][[1]],1}];ones7=Insert[ones6[[#]],ones4[[#]],3]&/@Table[j,{j,1,Dimensions[ones][[1]],1}];twos=Flatten[Position[asj,2]];If[twos=={},0,Dimensions[twos];twos1=Tuples[twos,2];twos2=Partition[twos1,Dimensions[twos][[1]]]];twos3=twos2[[#]][[RandomInteger[{1,Dimensions[twos][[1]]}]]]&/@Table[o,{o,1,Dimensions[twos][[1]],1}];twos4=Flatten[Drop[twos3[[#]],1]&/@Table[o,{o,1,Dimensions[twos][[1]],1}]];twos5=listaconjunta[[#]]&/@twos;twos6=Drop[twos5[[#]],-1]&/@Table[j,{j,1,Dimensions[twos][[1]],1}];twos7=Insert[twos6[[#]],twos4[[#]],3]&/@Table[j,{j,1,Dimensions[twos][[1]],1}];threes=Flatten[Position[asj,3]];If[threes=={},0,Dimensions[threes];threes1=Tuples[threes,2];threes2=Partition[threes1,Dimensions[threes][[1]]]];threes3=threes2[[#]][[RandomInteger[{1,Dimensions[threes][[1]]}]]]&/@Table[o,{o,1,Dimensions[threes][[1]],1}];threes4=Flatten[Drop[threes3[[#]],1]&/@Table[o,{o,1,Dimensions[threes][[1]],1}]];threes5=listaconjunta[[#]]&/@threes;threes6=Drop[threes5[[#]],-1]&/@Table[j,{j,1,Dimensions[threes][[1]],1}];threes7=Insert[threes6[[#]],threes4[[#]],3]&/@Table[j,{j,1,Dimensions[threes][[1]],1}];fours=Flatten[Position[asj,4]];If[fours=={},0,Dimensions[fours];fours1=Tuples[fours,2];fours2=Partition[fours1,Dimensions[fours][[1]]]];fours3=fours2[[#]][[RandomInteger[{1,Dimensions[fours][[1]]}]]]&/@Table[o,{o,1,Dimensions[fours][[1]],1}];fours4=Flatten[Drop[fours3[[#]],1]&/@Table[o,{o,1,Dimensions[fours][[1]],1}]];fours5=listaconjunta[[#]]&/@fours;fours6=Drop[fours5[[#]],-1]&/@Table[j,{j,1,Dimensions[fours][[1]],1}];fours7=Insert[fours6[[#]],fours4[[#]],3]&/@Table[j,{j,1,Dimensions[fours][[1]],1}];peep=Sort[Flatten[{zeros,ones,twos,threes,fours}]];aw=Partition[peep,1];Delete[listaconjunta,aw];neigh=Partition[Flatten[{zeros7,ones7,twos7,threes7,fours7}],3];aff=Partition[neigh[[#]][[3]]&/@tyu,1];afu=Insert[aff[[#]],0,1]&/@tyu;afu=Insert[afu[[#]],RandomInteger[{-Dimensions[Condinit][[1]],-1}],1]&/@tyu;aput=Partition[Partition[Flatten[afu],1],3]]]];
+
+ppp=CellularAutomaton[{2159062512564987644819455219116893945895958528152021228705752563807962227809675103689306,5,aput[[#]]},Condinit,cycle]&/@Table[i,{i,1,ah[[2]],1}];tew[tg_]:=ppp[[tg]][[#]][[tg]]&/@Table[po,{po,1,cycle+1,1}];asw=tew/@Table[po,{po,1,Dimensions[ppp][[1]],1}];l[v_]:=asw[[#]][[v]]&/@Table[pot,{pot,1,Dimensions[asw][[1]],1}];rr=l/@Table[pu,{pu,1,Dimensions[asw][[2]],1}];Condnow=rr;
+tyu=Table[t,{t,1,Dimensions[VertexList[zi]][[1]],1}];
+xe=Flatten[aput[[#]][[1]]+Dimensions[VertexList[zi]][[1]]+1&/@Table[h,{h,1,Dimensions[aput][[1]],1}]];
+xd=Flatten[If[Dimensions[VertexList[zi]][[1]]-aput[[#]][[3]][[1]]-1==0,#,Dimensions[VertexList[zi]][[1]]-aput[[#]][[3]][[1]]-1]&/@Table[h,{h,1,Dimensions[aput][[1]],1}]];
+listacz=Flatten[Append[p,Flatten[{#->xe[[#]],#->xd[[#]]}&/@Table[h,{h,1,Dimensions[aput][[1]],1}]]]];listacz27={listacz[[#]][[1]],listacz[[#]][[2]]}&/@Table[ij,{ij,1,Dimensions[listacz][[1]],1}];,{cycle}]
+
+{lista=VertexList[zi][[listacz[[#]][[1]]]]->VertexList[zi][[listacz[[#]][[2]]]]&/@Table[ii,{ii,1,Dimensions[listacz][[1]],1}];zi00=Graph[lista,VertexLabels->"Name",ImageSize->800];
+Mouseover[zipp00=Graph[Flatten[
+{Button[If[Position[suspects,#]!={},Style[#,Red],Style[#,LightGray]],Speak[#]
+]&/@VertexList[zi]}],lista,VertexLabels->"Name",ImageSize->800,VertexSize-> Thread[VertexList[zi]->Rescale[DegreeCentrality[zi]]],PlotLabel-> "MOUSE OVER TO FIND COMMUNITIES - CLICK TO SPEAK NAME"],HighlightGraph[zipp00, Subgraph[zipp00,#]&/@FindGraphCommunities[zipp00,Method->"Centrality"], VertexLabels->"Name"]]
+
+DayPlus[Today,Times[cycle,7]]}
+{Fri 8 Jan 2016 }
+
+CELLULAR AUTOMATA MODEL
+cp=PropertyValue[{zi00,#},VertexCoordinates]&/@VertexList[zi00];
+{ArrayPlot[rr,ColorRules->{0->RGBColor[1,0,0],1->RGBColor[1,0.4,0],2->RGBColor[1,0.5,0],3->RGBColor[1,0.6,0],4->RGBColor[1,0.7,0]},ImageSize->400,Mesh->True,Frame->True,FrameTicks->All,PlotLegends->Automatic],ArrayPlot[rr,FrameTicks->All,ImageSize->400,Mesh->True,Frame->True,FrameTicks->All,PlotLegends->Automatic]}
+
+EVOLUTION OF SOCIAL CHARACTERISTICS
+CORRELATION BETWEEN INITIAL STATE AND INTERACTIONS
+Dynamic[{
+HorizontalGauge[N[Correlation[rr[[1]],rr[[Clock[{1,cycle+1,1},cycle+1]]]]],{-1,1},GaugeLabels ->Placed["Value",Right],GaugeMarkers->"Marker",ImageSize->300],"Cycle=",Clock[{1,cycle+1,1},cycle+1]}]
+{,Cycle=,Clock[{1,1+cycle,1},1+cycle]}
+
+VARIANCE BEFORE AND AFTER INTERACTIONS
+{VerticalGauge[Variance[rr[[1]]],{0,4},GaugeLabels ->Placed["Value",Right],GaugeMarkers->"Marker",GaugeFrameStyle->Blue,ScaleRanges->{{0,1}->Red,{1,2}->Yellow,{2,4}->Green}],
+VerticalGauge[Variance[rr[[cycle+1]]],{0,4},GaugeLabels ->Placed["Value",Right],GaugeMarkers->"Marker",GaugeFrameStyle->Black,ScaleRanges->{{0,1}->Red,{1,2}->Yellow,{2,4}->Green}]}
+
+EUCLIDEAN DISTANCE OF THE SOCIAL NETWORK BEFORE AND AFTER INTERACTIONS
+cp3=PropertyValue[{zi,#},VertexCoordinates]&/@VertexList[zi];
+{VerticalGauge[Mean[EuclideanDistance[cp3[[#]][[1]],cp3[[#]][[2]]]&/@tyu],{0,2.5},GaugeLabels ->Placed["Value",Right],GaugeMarkers->"Marker",GaugeFrameStyle->Blue,ScaleRanges->{{0,1}->Green,{1,1.8}->Yellow,{1.8,2.5}->Red}],VerticalGauge[Mean[EuclideanDistance[cp[[#]][[1]],cp[[#]][[2]]]&/@tyu],{0,2.5},GaugeLabels ->Placed["Value",Right],GaugeMarkers->"Marker",GaugeFrameStyle->Black,ScaleRanges->{{0,1}->Green,{1,1.8}->Yellow,{1.8,2.5}->Red}]}
+
+NUMBER OF CONNECTIONS BEFORE AND AFTER INTERACTIONS
+{VerticalGauge[Total[DegreeCentrality[zi]],{0,250},GaugeLabels ->Placed["Value",Right],GaugeMarkers->"Marker",GaugeFrameStyle->Black,ScaleRanges->{{0,100}->Red,{100,200}->Yellow,{200,300}->Green}],VerticalGauge[Total[DegreeCentrality[zi00]],{0,250},ScaleRanges->{{0,100}->Red,{100,200}->Yellow,{200,300}->Green},GaugeLabels ->Placed["Value",Right],GaugeMarkers->"Marker",GaugeFrameStyle->Blue]}
+
+MOOD OF THE SOCIAL NETWORK BEFORE AND AFTER INTERACTIONS (unstructured data parameters)
+{VerticalGauge[Mean[rr[[1]]],{0,4},GaugeLabels ->Placed["Value",Right],GaugeMarkers->"Marker",GaugeFrameStyle->Black,ScaleRanges->{{0,1.5}->Green,{1.5,3}->Yellow,{3,4}->Red}],VerticalGauge[Mean[rr[[cycle+1]]],{0,4},GaugeLabels ->Placed["Value",Right],GaugeMarkers->"Marker",GaugeFrameStyle->Blue,ScaleRanges->{{0,1.5}->Green,{1.5,3}->Yellow,{3,4}->Red}]}
+
+MOOD HISTOGRAM
+{SmoothHistogram[rr[[1]],ImageSize->300,Filling->Axis,PlotLabel->"BEFORE",ColorFunction->Function[{x,y},Hue[x]]],SmoothHistogram[rr[[cycle+1]],ImageSize->300,Filling->Axis,PlotRange->All,PlotLabel->"AFTER INTERACTIONS",ColorFunction->Function[{x,y},Hue[x]]]}
+
+EVOLUTION OF INDIVIDUALS MOOD AFTER INTERACTIONS (difference)
+VertexList[zi][[#]]->(rr[[cycle+1]]-rr[[1]])[[#]]&/@Table[pu,{pu,1,Dimensions[VertexList[zi]][[1]],1}]
+{Amanda->4,Patrick->2,Ben->3,Paul->0,Boehner->-1,Hillary->-1,JPMorgan->-1,Odierno->1,Brittan->0,Kimberly->1,Paula->-1,TheOne->0,Cailin->2,Fred->-3,Clinton->-3,Michelle->3,DalaiLama->-3,Osama->-1,Franz->1,Yellen->-4,McCain->-2,Jennings->1,Richard->3,Mark->1,Patricia->-1,Meg->3,Michael->-3,Pope->-1,Tedd->1}
+BarChart[{rr[[cycle+1]]-rr[[1]]},LabelingFunction->(Placed[#,Above]&),ChartLabels->{Placed[VertexList[zi],Below,Rotate[#,Pi/2]&]},ImageSize->500,ChartElementFunction->ChartElementDataFunction["SegmentScaleRectangle","Segments"->8,"ColorScheme"->"GreenPinkTones"]]
+
+MOOD OF THE SOCIAL NETWORK ALONG CYCLES
+ListLinePlot[Total[rr[[#]]]&/@Table[ri,{ri,1,cycle+1,1}],InterpolationOrder->2,Filling->Axis,ColorFunction->Function[{x,y},Blend[{Green,Yellow,Orange,Red},x]],PlotLabel->"TOTAL MOOD OF NETWORK",PlotRange->{{0,cycle},{20,120}}]
+
+Manipulate[{ListLinePlot[be2[ty2_]:=Count[rr[[#]],ty2]/140&/@Table[i,{i,1,cycle+1,1}];hi2=be2/@{0,1,2,3,4};hi2,InterpolationOrder->2,PlotRange->All,AxesLabel->{"Weeks","Quantity"\.1c},FrameStyle->Directive[Black,Medium],PlotStyle->{Green,Orange,Blue,Black,Red},PlotLabel->"MOOD OF SOCIAL NETWORK",PlotLegends->{"Calm","Neutral","Bothered","Angry","Pissed"},ImageSize->400, Filling->Axis],zo1=DayPlus[Today,Times[ciclos,7]]},{{ciclos,3,"Weeks"},1,cycle,1,Appearance->"Open"}]
+
+Manipulate[{ListLinePlot[be2[ty2_] := (Count[rr[[#1]], ty2]/140 & ) /@ 
+       Table[i, {i, 1, cycle + 1, 1}]; hi2 = be2 /@ {0, 1, 2, 3, 4}; hi2, 
+    InterpolationOrder -> 2, PlotRange -> All, 
+    AxesLabel -> {"Weeks", "Quantity"*\.1c}, FrameStyle -> 
+     Directive[Black, Medium], PlotStyle -> {Green, Orange, Blue, Black, 
+      Red}, PlotLabel -> "MOOD OF SOCIAL NETWORK", 
+    PlotLegends -> {"Calm", "Neutral", "Bothered", "Angry", "Pissed"}, 
+    ImageSize -> 400, Filling -> Axis], zo1 = DayPlus[Today, ciclos*7]}, 
+  {{ciclos, 3, "Weeks"}, 1, 2, 1, Appearance -> "Open"}]
+
+
+Dynamic[{AngularGauge[Total[rr[[Clock[{1,cycle+1,1},6]]]],{0,150},LabelStyle->{12,Blue},GaugeLabels ->Placed[ "Total Mood in CA Cycle",Above],GaugeStyle->Black,GaugeMarkers->"Marker",GaugeFrameStyle->Black,ScaleRanges->{{0,50}->LightGray,{50,100}->LightRed,{100,150}->Red},ScaleOrigin->{\[Pi],0}],
+
+AngularGauge[sf=Total[Total[rr[[#]]&/@Table[jk,{jk,1,Clock[{1,cycle+1,1},6],1}]]],{0,5000},GaugeStyle->Black,ScaleOrigin->{\[Pi],0},GaugeMarkers->"Marker",LabelStyle->{12,Blue},GaugeLabels ->Placed[ "Accumulated Mood",Above],GaugeFrameStyle->Black,ScaleRanges->{{0,2500}->LightGray,{2500,4000}->LightRed,{4000,5000}->Red}],"Cycle=",Dynamic[Clock[{1,cycle+1,1},6]]}]
+{,,Cycle=,Clock[{1,1+cycle,1},6]}
+
+EVOLUTION OF MOOD FOR EACH INDIVIDUAL DURING INTERACTIONS
+Manipulate[{ListLinePlot[rr[[#]][[Position[VertexList[zi],ty][[1]][[1]]]]&/@Table[ri,{ri,1,cycle+1,1}],InterpolationOrder->2,PlotLabel->"INDIVIDUAL MOOD EVOLUTION",Filling->Axis,AxesLabel->{"Time","Mood"},PlotStyle->{Orange,PointSize[Medium]},PlotRange->{{0,cycle},{-1,5}},ImageSize->400],
+gy[uy_]:=rr[[#]][[uy]]&/@Table[jh,{jh,1,Dimensions[rr][[1]],1}];dr=gy/@Table[jh,{jh,1,Dimensions[VertexList[zi]][[1]],1}];ArrayPlot[{dr[[Position[VertexList[zi],ty][[1]][[1]]]]},ColorRules->{0->RGBColor[1,0,0],1->RGBColor[1,0.4,0],2->RGBColor[1,0.5,0],3->RGBColor[1,0.6,0],4->RGBColor[1,0.7,0]},ImageSize->900,Mesh->True]},{ty,Sort[VertexList[zi]]}]
+
+Manipulate[{ListLinePlot[(rr[[#1]][[Position[VertexList[zi], ty][[1]][[
+        1]]]] & ) /@ Table[ri, {ri, 1, cycle + 1, 1}], 
+    InterpolationOrder -> 2, PlotLabel -> "INDIVIDUAL MOOD EVOLUTION", 
+    Filling -> Axis, AxesLabel -> {"Time", "Mood"}, 
+    PlotStyle -> {Orange, PointSize[Medium]}, 
+    PlotRange -> {{0, cycle}, {-1, 5}}, ImageSize -> 400], 
+   gy[uy_] := (rr[[#1]][[uy]] & ) /@ Table[jh, {jh, 1, Dimensions[rr][[1]], 
+        1}]; dr = gy /@ Table[jh, {jh, 1, Dimensions[VertexList[zi]][[1]], 
+        1}]; ArrayPlot[{dr[[Position[VertexList[zi], ty][[1]][[1]]]]}, 
+     ColorRules -> {0 -> RGBColor[1, 0, 0], 1 -> RGBColor[1, 0.4, 0], 
+       2 -> RGBColor[1, 0.5, 0], 3 -> RGBColor[1, 0.6, 0], 
+       4 -> RGBColor[1, 0.7, 0]}, ImageSize -> 900, Mesh -> True]}, 
+  {ty, {"Amanda", "Ben", "Boehner", "Brittan", "Cailin", "Clinton", 
+    "DalaiLama", "Franz", "Fred", "Hillary", "Jennings", "JPMorgan", 
+    "Kimberly", "Mark", "McCain", "Meg", "Michael", "Michelle", "Odierno", 
+    "Osama", "Patricia", "Patrick", "Paul", "Paula", "Pope", "Richard", 
+    "Tedd", "TheOne", "Yellen"}}]
+
+COMMUNITIES IN SIMULATION
+CommunityGraphPlot[zipp00,FindGraphCommunities[zipp00,Method->"Centrality"],CommunityBoundaryStyle->Dashed,CommunityRegionStyle->Green,PlotLabel->"COMMUNITIES",PlotLegends->All,CommunityLabels->Placed[Table[j,{j,1,Dimensions[FindGraphCommunities[zipp00,Method->"Centrality"]][[1]],1}],Below]]
+
+NUMBER OF CONNECTIONS OF EACH INDIVIDUAL
+BarChart[SortBy[{VertexList[zi00],DegreeCentrality[zi00]}\[Transpose],Last][[#]][[2]]&/@Table[ju,{ju,1,Dimensions[VertexList[zi00]][[1]],1}]//Reverse,BarOrigin->Left,ChartLabels->{SortBy[{VertexList[zi00],DegreeCentrality[zi00]}\[Transpose],Last][[#]][[1]]&/@Table[ju,{ju,1,Dimensions[VertexList[zi00]][[1]],1}]//Reverse},ChartElementFunction->ChartElementDataFunction["SegmentScaleRectangle","Segments"->15,"ColorScheme"->"BrightBands"],BarSpacing->Large,ChartStyle->"Pastel",ImageSize->700,PlotLabel->"NUMBER OF CONNECTIONS AFTER SIMULATION"]
+
+a00=Subgraph[zipp00,FindGraphCommunities[zipp00,Method->"Centrality"][[#]]]&/@Table[j,{j,1,Dimensions[FindGraphCommunities[zipp00,Method->"Centrality"]][[1]],1}];
+
+Clusters inside a community and seggregation.
+
+{#,a00[[#]]}&/@Table[k,{k,1,Dimensions[a00][[1]],1}]
+c00=FindGraphCommunities[zipp00,Method->"Centrality"];
+
+Manipulate[{DayPlus[Today,Times[cycle,7]],Mouseover[zio00=Graph[
+a00[[Community]],PlotLabel->"COMMUNITIES",VertexLabels->"Name",ImageSize->600,VertexStyle->Flatten[{If[Flatten[Position[suspects,#]]!={},#->Red,#->LightGray]&/@VertexList[a00[[Community]]]}],VertexSize-> Thread[VertexList[zi]->.4 Rescale[DegreeCentrality[zi]]]],HighlightGraph[zio00, Subgraph[zio00,#]&/@FindGraphCommunities[zio00],EdgeStyle->Arrowheads[.08], VertexLabels->"Name"]]},{Community,Table[h,{h,1,Dimensions[c00][[1]],1}]}]
+
+Manipulate[{DayPlus[Today, cycle*7], 
+   Mouseover[zio00 = Graph[a00[[Community]], PlotLabel -> "COMMUNITIES", 
+      VertexLabels -> "Name", ImageSize -> 600, VertexStyle -> 
+       Flatten[{(If[Flatten[Position[suspects, #1]] != {}, #1 -> Red, 
+            #1 -> LightGray] & ) /@ VertexList[a00[[Community]]]}], 
+      VertexSize -> Thread[VertexList[zi] -> 
+         0.4*Rescale[DegreeCentrality[zi]]]], HighlightGraph[zio00, 
+     (Subgraph[zio00, #1] & ) /@ FindGraphCommunities[zio00], 
+     EdgeStyle -> Arrowheads[0.08], VertexLabels -> "Name"]]}, 
+  {Community, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}}]
+
+
+SUSPECTS ACTIVITY AND WEAK TIES IN SIMULATION
+listacz200=VertexList[zi][[listacz[[#]][[1]]]]->VertexList[zi][[listacz[[#]][[2]]]]&/@Table[go,{go,1,Dimensions[listacz][[1]],1}];
+ft200[gg200_]:=If[listacz200[[#]][[1]]==y[[gg200]],listacz200[[#]][[1]]->listacz200[[#]][[2]],If[listacz200[[#]][[2]]==y[[gg200]],listacz200[[#]][[1]]->listacz200[[#]][[2]],{}]]&/@Table[h,{h,1,Dimensions[listacz200][[1]],1}];r00=Flatten[ft200/@Table[h,{h,1,Dimensions[y][[1]],1}]];
+{DayPlus[Today,Times[cycle,7]],r100=Graph[r00,VertexLabels->"Name",ImageSize->600];Mouseover[zipp900=Graph[Flatten[
+{Button[If[Position[y,#]!={},Style[#,Red],Style[#,LightGray]],Speak[#]
+]&/@VertexList[r1]}],r00,VertexLabels->"Name",ImageSize->600,EdgeStyle->Arrowheads[.04],VertexSize-> Thread[VertexList[r100]->.8 Rescale[DegreeCentrality[r100]]],PlotLabel-> "SUSPECTS ACTIVITY WEAK TIES - MOUSE OVER COMMUNITIES"],HighlightGraph[zipp900, Subgraph[zipp900,#]&/@FindGraphCommunities[zipp900], VertexLabels->"Name"]]}
+{Fri 8 Jan 2016,}
+
+INDIVIDUAL INTERACTIONS
+Note the increase in number of connections
+
+DynamicModule[{ll=Sort[VertexList[zi00]],cl=Sort[VertexList[zi00]],n},
+{PopupView[ll,Dynamic[n]],Dynamic[{y5=Sort[VertexList[zi]][[n]];z5=Flatten[If[listacz2[[#]][[1]]==y5,listacz2[[#]][[1]]->listacz2[[#]][[2]],If[listacz2[[#]][[2]]==y5,listacz2[[#]][[1]]->listacz2[[#]][[2]],{}]]&/@Table[h,{h,1,Dimensions[listacz2][[1]],1}]];za5=Graph[z5,VertexLabels->"Name",ImageSize->600];
+Mouseover[zipp7=Graph[Flatten[
+{Button[If[Position[suspects,#]!={},Style[#,Red],Style[#,LightGray]],Speak[#]
+]&/@VertexList[za5]}],z5,VertexLabels->"Name",ImageSize->400,EdgeStyle->Arrowheads[.08],VertexSize-> Thread[VertexList[za5]->.3Rescale[DegreeCentrality[za5]]],PlotLabel-> "REAL DATA BEFORE"],
+HighlightGraph[zipp7, Subgraph[zipp7,#]&/@FindGraphCommunities[zipp7], VertexLabels->"Name"]],y5=Sort[VertexList[zi00]][[n]];z500=Flatten[If[listacz200[[#]][[1]]==y5,listacz200[[#]][[1]]->listacz200[[#]][[2]],If[listacz200[[#]][[2]]==y5,listacz200[[#]][[1]]->listacz200[[#]][[2]],{}]]&/@Table[h,{h,1,Dimensions[listacz200][[1]],1}]];za500=Graph[z500,VertexLabels->"Name",ImageSize->600];
+Mouseover[zipp700=Graph[Flatten[
+{Button[If[Position[suspects,#]!={},Style[#,Red],Style[#,LightGray]],Speak[#]
+]&/@VertexList[za5]}],z500,VertexLabels->"Name",ImageSize->400,EdgeStyle->Arrowheads[.08],VertexSize-> Thread[VertexList[za500]->.3Rescale[DegreeCentrality[za500]]],PlotLabel-> "AFTER MULTIPLE INTERACTIONS"],
+HighlightGraph[zipp700, Subgraph[zipp700,#]&/@FindGraphCommunities[zipp700], VertexLabels->"Name"]]}
+]}]
+{BoxData[Amanda],{Graph[{VertexList[Graph[Table[(If[listacz2[[#1]][[1]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],If[listacz2[[#1]][[2]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],{}]]&)[h],{If[listacz2==zi,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],If[listacz2[[{h,1,{}[[1]],1}]][[2]]==y5,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->600]]},Table[(If[listacz2[[#1]][[1]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],If[listacz2[[#1]][[2]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],{}]]&)[h],{If[listacz2==zi,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],If[listacz2[[{h,1,{}[[1]],1}]][[2]]==y5,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->400,EdgeStyle->Arrowheads[0.08],VertexSize->VertexList[Graph[Table[(If[listacz2[[#1]][[1]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],If[listacz2[[#1]][[2]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],{}]]&)[h],{If[listacz2==zi,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],If[listacz2[[{h,1,{}[[1]],1}]][[2]]==y5,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->600]]->0.3 Rescale[DegreeCentrality[Graph[Table[(If[listacz2[[#1]][[1]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],If[listacz2[[#1]][[2]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],{}]]&)[h],{If[listacz2==zi,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],If[listacz2[[{h,1,{}[[1]],1}]][[2]]==y5,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->600]]],PlotLabel->REAL DATA BEFORE],Graph[{VertexList[Graph[Table[(If[listacz2[[#1]][[1]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],If[listacz2[[#1]][[2]]==y5,listacz2[[#1]][[1]]->listacz2[[#1]][[2]],{}]]&)[h],{If[listacz2==zi,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],If[listacz2[[{h,1,{}[[1]],1}]][[2]]==y5,listacz2[[{h,1,{}[[1]],1}]][[1]]->listacz2[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->600]]},Table[(If[listacz200[[#1]][[1]]==y5,listacz200[[#1]][[1]]->listacz200[[#1]][[2]],If[listacz200[[#1]][[2]]==y5,listacz200[[#1]][[1]]->listacz200[[#1]][[2]],{}]]&)[h],{If[listacz200==zi00,listacz200[[{h,1,{}[[1]],1}]][[1]]->listacz200[[{h,1,{}[[1]],1}]][[2]],If[listacz200[[{h,1,{}[[1]],1}]][[2]]==y5,listacz200[[{h,1,{}[[1]],1}]][[1]]->listacz200[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->400,EdgeStyle->Arrowheads[0.08],VertexSize->VertexList[Graph[Table[(If[listacz200[[#1]][[1]]==y5,listacz200[[#1]][[1]]->listacz200[[#1]][[2]],If[listacz200[[#1]][[2]]==y5,listacz200[[#1]][[1]]->listacz200[[#1]][[2]],{}]]&)[h],{If[listacz200==zi00,listacz200[[{h,1,{}[[1]],1}]][[1]]->listacz200[[{h,1,{}[[1]],1}]][[2]],If[listacz200[[{h,1,{}[[1]],1}]][[2]]==y5,listacz200[[{h,1,{}[[1]],1}]][[1]]->listacz200[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->600]]->0.3 Rescale[DegreeCentrality[Graph[Table[(If[listacz200[[#1]][[1]]==y5,listacz200[[#1]][[1]]->listacz200[[#1]][[2]],If[listacz200[[#1]][[2]]==y5,listacz200[[#1]][[1]]->listacz200[[#1]][[2]],{}]]&)[h],{If[listacz200==zi00,listacz200[[{h,1,{}[[1]],1}]][[1]]->listacz200[[{h,1,{}[[1]],1}]][[2]],If[listacz200[[{h,1,{}[[1]],1}]][[2]]==y5,listacz200[[{h,1,{}[[1]],1}]][[1]]->listacz200[[{h,1,{}[[1]],1}]][[2]],{}]]}],VertexLabels->Name,ImageSize->600]]],PlotLabel->AFTER MULTIPLE INTERACTIONS]}}
+
+HIERARCHY IN SIMULATION: 
+notice the hierarchy flattens with multiple interactions (strong ties)
+
+zs=Count[Flatten[emails],VertexList[zi][[#]]]&/@Table[h,{h,1,Dimensions[VertexList[zi]][[1]],1}];
+
+Manipulate[Mouseover[
+LayeredGraphPlot[listacz,VertexLabeling->True,PlotLabel->"IMPORTANT NODES - INDIVIDUALS WITH MORE CONNECTIONS - MOUSE OVER TO SEE SUSPECTS",VertexRenderingFunction->({If[Count[Flatten[emails],VertexList[zi][[#2]]]>=ft1,Yellow,White],EdgeForm[Black],Disk[#,.7],Black,Text[
+Style[VertexList[zi][[#2]],Medium],#1]}&),SelfLoopStyle->All,ImageSize->900],
+
+LayeredGraphPlot[listacz,VertexLabeling->True,PlotLabel->"SUSPECTS IN RED",VertexRenderingFunction->({If[Position[suspectsok,VertexList[zi][[#2]]]=={},White,Red],EdgeForm[Black],Disk[#,.7],Black,Text[
+Style[VertexList[zi][[#2]],Medium],#1]}&),SelfLoopStyle->All,ImageSize->900]],{{ft1,.64 Max[zs] ,"Threshold Number of Connections More Than"},0,Max[zs],1,Appearance->"Open"}]
+
+Manipulate[Mouseover[LayeredGraphPlot[listacz, VertexLabeling -> True, 
+    PlotLabel -> "IMPORTANT NODES - INDIVIDUALS WITH MORE CONNECTIONS - MOUSE 
+OVER TO SEE SUSPECTS", VertexRenderingFunction -> 
+     ({If[Count[Flatten[emails], VertexList[zi][[#2]]] >= ft1, Yellow, 
+        White], EdgeForm[Black], Disk[#1, 0.7], Black, 
+       Text[Style[VertexList[zi][[#2]], Medium], #1]} & ), 
+    SelfLoopStyle -> All, ImageSize -> 900], LayeredGraphPlot[listacz, 
+    VertexLabeling -> True, PlotLabel -> "SUSPECTS IN RED", 
+    VertexRenderingFunction -> 
+     ({If[Position[suspectsok, VertexList[zi][[#2]]] == {}, White, Red], 
+       EdgeForm[Black], Disk[#1, 0.7], Black, 
+       Text[Style[VertexList[zi][[#2]], Medium], #1]} & ), 
+    SelfLoopStyle -> All, ImageSize -> 900]], 
+  {{ft1, 8.96, "Threshold Number of Connections More Than"}, 0, 14, 1, 
+   Appearance -> "Open"}]
