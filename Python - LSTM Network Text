@@ -81,4 +81,4 @@ for i in range(40):
     s.append(result)
     print("".join(s))
 
-### Code adapted from: http://machinelearningmastery.com/text-generation-lstm-recurrent-neural-networks-python-keras/
+### Code adapted from: http://machinelearningmastery.com for keras 1.1.0
