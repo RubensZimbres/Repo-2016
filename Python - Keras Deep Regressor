@@ -1,0 +1,98 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import keras
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.optimizers import SGD
+from keras.callbacks import LearningRateScheduler,EarlyStopping, ModelCheckpoint
+from keras import backend as K
+
+epochs = 2000
+learning_rate = 0.01
+decay_rate = 5e-6
+momentum = 0.9
+reg=0.01
+look_back = 5
+
+sd=[]
+class LossHistory(keras.callbacks.Callback):
+    def on_train_begin(self, logs={}):
+        self.losses = [1,1]
+
+    def on_epoch_end(self, batch, logs={}):
+        self.losses.append(logs.get('loss'))
+        sd.append(step_decay(len(self.losses)))
+        print('learning rate:', step_decay(len(self.losses)))
+        print('derivative of loss:', 2*np.sqrt((self.losses[-1])))
+
+def my_init(shape, name=None):
+    value = np.random.random(shape)
+    return K.variable(value, name=name)
+
+def step_decay(losses):
+    if float(2*np.sqrt(np.array(history.losses[-1])))<1:
+        lrate=0.01*1/(1+0.1*len(history.losses))
+        momentum=0.2
+        decay_rate=0.0
+        return lrate
+    else:
+        lrate=0.01
+        return lrate
+
+model = Sequential()
+model.add(Dense(6, input_dim=3, init=my_init))
+model.add(Activation('tanh'))
+model.add(Dropout(0.5))
+model.add(Dense(2, init='uniform'))
+model.add(Activation('softmax'))
+sgd = SGD(lr=0.01, decay=1e-6, momentum=0.97, nesterov=True)
+model.compile(loss='categorical_crossentropy',
+              optimizer=sgd,metrics=['accuracy'])
+
+aa=pd.read_csv('questao1NN.csv',sep=',',header=0)
+df=aa[0:1800]
+df2=aa[1801:1999]
+
+y=np.array(df[[1]])
+y_train=[item for sublist in y for item in sublist]
+y_train=pd.get_dummies(y_train)
+y_train=np.array(y_train)
+y_train=pd.DataFrame(y_train).values
+
+x=np.array(df)
+x1=x.T
+
+for i in range(1,14):
+    x1[i]=np.array([float(i) for i in x1[i]])
+
+x2=[x1[6],x1[7],x1[9]]
+x3=np.array(x2).T
+X_train=x3
+X_train.shape
+
+y2=np.array(df2[[1]])
+y_train2=[item for sublist in y2 for item in sublist]
+y_train20=pd.get_dummies(y_train2)
+y_train2=np.array(y_train20)
+y_test=pd.DataFrame(y_train2).values
+y_test.shape
+
+x0=np.array(df2)
+x10=x0.T
+x20=[x10[1],x10[2]]
+x30=np.array(x20).T
+X_test=x30
+
+history=LossHistory()
+lrate=LearningRateScheduler(step_decay)
+
+model.fit(X_train, y_train,nb_epoch=20,batch_size=1000,callbacks=[history,lrate])
+
+model.evaluate(X_train, y_train, batch_size=16)
+model.predict(X_train, batch_size=32, verbose=0)
+
+b=[float(i) for i in history.losses]
+plt.plot(b,color='r')
+plt.title("LOSS HISTORY")
+plt.show()
