@@ -1,6 +1,6 @@
 from __future__ import print_function
 import numpy as np
-np.random.seed(1337)  # for reproducibility
+np.random.seed(1337)  
 
 from keras.datasets import mnist
 from keras.models import Sequential
@@ -13,16 +13,11 @@ batch_size = 64
 nb_classes = 10
 nb_epoch = 2
 
-# input image dimensions
-img_rows, img_cols = 28, 28
-# number of convolutional filters to use
-nb_filters = 32
-# size of pooling area for max pooling
-pool_size = (2, 2)
-# convolution kernel size
-kernel_size = (3, 3)
 
-# the data, shuffled and split between train and test sets
+img_rows, img_cols = 28, 28
+nb_filters = 32
+pool_size = (2, 2)
+kernel_size = (3, 3)
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
 if K.image_dim_ordering() == 'th':
@@ -38,11 +33,6 @@ X_train = X_train.astype('float32')
 X_test = X_test.astype('float32')
 X_train /= 255
 X_test /= 255
-print('X_train shape:', X_train.shape)
-print(X_train.shape[0], 'train samples')
-print(X_test.shape[0], 'test samples')
-
-# convert class vectors to binary class matrices
 Y_train = np_utils.to_categorical(y_train, nb_classes)
 Y_test = np_utils.to_categorical(y_test, nb_classes)
 
