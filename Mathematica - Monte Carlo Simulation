@@ -1,4 +1,7 @@
-MONTE CARLO SIMULATION - AUTONOMOUS DRIVING
+MARKOV CHAIN MONTE CARLO SIMULATION - AUTONOMOUS DRIVING
+
+VIDEO OF THE OUTPUT:
+https://www.youtube.com/watch?v=_2l6DgUgGFw
 
 Table[Insert[Table[0,{5}],1,RandomInteger[{1,5}]],{15}];
 a={{0,0,0,0,1,0},{0,1,0,0,0,0},{0,0,1,0,0,0},{0,0,0,1,0,0},{0,1,0,0,0,0},{0,0,0,0,1,0},{0,0,0,1,0,0},{0,1,0,0,0,0},{0,1,0,0,0,0},
@@ -45,7 +48,3 @@ dg=Total[Abs[{r[[#]][[1]]-r[[#]][[2]],r[[#]][[2]]-r[[#]][[3]],r[[#]][[3]]-r[[#]]
 
 Insert[Delete[a,#],f13[[1]][[#]],#]&/@Table[k,{k,1,5,1}]
 {q[[Flatten[Position[dg,Min[dg]]][[1]]]],ArrayPlot[hh2[[1]],Mesh->True,ImageSize->220,ColorRules->{0->White,1->Black,2->Green}]}
-
-OUTPUT:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/jcSbMFNcMOc" frameborder="0" allowfullscreen></iframe>
