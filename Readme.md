@@ -42,27 +42,27 @@ Python - Support Vector Machines	is a Machine Learning model that classifies the
 
 Python - Theano Deep Learning	is a Neural Network with two hidden layers
 
-R - Churn of Customers
+R - Churn of Customers is a model that uses a logistic regression associated with a threshold to predict which customers present the greater risk to be lost.
 
-R - Data Cleaning + Multinomial Regression	Create R - Data Cleaning + Multinomial Regression	2 days ago
+R - Data Cleaning + Multinomial Regression	is a model that presents data cleaning and a multinomial regression using package nnet to classify customers according to their level of loyalty.
 
-R - Face Recognition	Create R - Face Recognition	23 hours ago
+R - Face Recognition	is a code to detect faces and objects in R.
 
-R - Geolocation	Create R - Geolocation	2 days ago
+R - Geolocation	is a file for geo-spatial localization.
 
-R - Geolocation USA	Create R - Geolocation USA	2 days ago
+R - Geolocation USA	is also a file for geo-spatial localization, USA map.
 
-R - Gradient Descent + Regularization	Create R - Gradient Descent + Regularization	2 days ago
+R - Gradient Descent + Regularization	is a model that performs a gradient descent and a regularization, developed from scratch.
 
-R - H2O Deep Learning	Create R - H2O Deep Learning	2 days ago
+R - H2O Deep Learning	is a Neural Network model deveoped to predict and classify word-of-mouth advertising.
 
-R - MNIST	Create R - MNIST	2 days ago
+R - MNIST	is a solution for the MNIST dataset, developed from scratch.
 
-R - Markov Chains	Create R - Markov Chains	2 days ago
+R - Markov Chains	is a simple visualization of Markeov Chains and probabilities associated.
 
-R - NeuralNet	Create R - NeuralNet	2 days ago
+R - NeuralNet	is also a Neural Network model deveoped to predict and classify word-of-mouth advertising.
 
-R - Ridge Regression	Create R - Ridge Regression	2 days ago
+R - Ridge Regression is a model with Ridge Regularization made from scratch to prevent overfitting.
 
 
 For examples of the outputs of these models, access my Portfolio at: http://www.slideshare.net/RubensZimbres/my-portfolio-77-dec-2016
