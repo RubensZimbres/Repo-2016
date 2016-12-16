@@ -15,11 +15,11 @@ Mathematica - Social Network Surveillance:	is a model that tracks individuals in
 ------------------
 PYTHON CODES:
 
-Python - Autoencoder MNIST:	is an autoencoder model for classification of images, in this case, the MNIST dataset.
+Python - Autoencoder MNIST:	is an autoencoder model for classification of images, in this case, the MNIST dataset, with model Checkpoint to save weights.
 
-Python - Autoencoder for Text Classification:	is an autoencoder model for classification of text made with Keras.
+Python - Autoencoder for Text Classification:	is an autoencoder model for classification of text made with Keras, with model Checkpoint.
 
-Python - Deep Learning with Lasagne:	is a deep neural network developed with Lasagne.
+Python - Deep Learning with Lasagne:	is a deep neural network developed with Lasagne, where you can see values of weights.
 
 Python - Face Recognition:	is a model using OpenCV to detect faces.
 
@@ -31,7 +31,7 @@ Python - Keras Deep Regressor:	is a deep Neural Network for prediction of a cont
 
 Python - Keras LSTM Network:	is a Recurrent Neural Network (LSTM) to predict and generate text.
 
-Python - Keras Multi Layer Perceptron:	is a MLP model, for prediction and classification.
+Python - Keras Multi Layer Perceptron:	is a MLP model, Neural Networks made with Keras with loss history, scheduled learning rate according to derivative of error for prediction and classification.
 
 Python - Machine Learning: is a Principal Components Analysis followed by a Linear Regression.
 
