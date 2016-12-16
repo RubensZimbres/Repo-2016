@@ -9,6 +9,10 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Mathematica - Artificial Intelligence Simulating Interactions in Social Networks:  </b>	is a model that simulates human interactions in a social network using cellular automata and agent-based modeling. Each agent has 3 possible choices for interation and a memory. The code has 14 pages with a big loop included in one line of code.
 
+<b> Mathematica - Facial Recognition in Movement: </b> This code operationalize facial recognition in a downloaded YouTube video. The output is also a video with the result of face recognition (YouTube link of the output is included in code page)
+
+<b> Mathematica - Monte Carlo Simulation: </b> is an animated model of a Markov Chain Monte Carlo Simulation for autonomous driving. A video of the dynamic output was also generated and link for the YouTube video is included in code page.
+  
 <b> Mathematica - Social Network Surveillance:  </b>	is a model that tracks individuals in a social network, tracks also his connections and future interactions.
 
 
