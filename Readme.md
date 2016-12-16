@@ -5,7 +5,7 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 ------------------
 MATHEMATICA CODES:
 
-MNIST_HOT.5.FULL	is a solution for the MNIST dataset in Mathematica, with 96.54 accuracy, based on difference of pixels.
+MNIST_HOT.5.FULL	is a solution for the MNIST dataset in Mathematica, with 96.51% accuracy, based on difference of pixels.
 
 Mathematica - Artificial Intelligence Simulating Interactions in Social Networks	is a model that simulates human interactions in a social network using cellular automata and agent-based modeling. Each agent has 3 possible choices for interation. The code has 14 pages.
 
@@ -17,7 +17,7 @@ PYTHON CODES:
 
 Python - Autoencoder MNIST	is an autoencoder model for classiciaftion of images, in this case, the MNIST dataset.
 
-Python - Autoencoder for Text Classification	is an autoencoder model for classification of text.
+Python - Autoencoder for Text Classification	is an autoencoder model for classification of text made with Keras.
 
 Python - Deep Learning with Lasagne	is a deep neural network developed with Lasagne.
 
@@ -65,13 +65,13 @@ R - Geolocation USA	is also a file for geo-spatial localization, USA map.
 
 R - Gradient Descent + Regularization	is a model that performs a gradient descent and a regularization, developed from scratch.
 
-R - H2O Deep Learning	is a Neural Network model deveoped to predict and classify word-of-mouth advertising.
+R - H2O Deep Learning	is a Neural Network model developed to predict recommendations and word-of-mouth advertising.
 
 R - MNIST	is a solution for the MNIST dataset, developed from scratch.
 
 R - Markov Chains	is a simple visualization of Markeov Chains and probabilities associated.
 
-R - NeuralNet	is also a Neural Network model deveoped to predict and classify word-of-mouth advertising.
+R - NeuralNet	is a Neural Network model deveoped to predict and classify word-of-mouth advertising.
 
 R - Ridge Regression is a model with Ridge Regularization made from scratch to prevent overfitting.
 
