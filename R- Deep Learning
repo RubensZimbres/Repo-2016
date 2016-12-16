@@ -5,19 +5,18 @@ logitML<-read.csv("LogitML2.csv",sep=",",header=TRUE,fileEncoding="latin1")
 logitML<-logitML[1:192,]
 library(ISLR)
 library(neuralnet)
-maxs0 <- apply(logitML[,c(18:29,31)], 2, max)
-mins0 <- apply(logitML[,c(18:29,31)], 2, min)
-scaled <- as.data.frame(scale(logitML[,c(18:29,31)],center = mins, scale = maxs0 - mins0))
-
-c0_recomend = as.numeric(logitML$c0_recomend)
-data = cbind(c0_recomend,scaled)
-
 library(caTools)
 set.seed(500)
+
+padron <- as.data.frame(scale(logitML[,c(18:29,31)],center = apply(logitML[,c(18:29,31)], 2, min), scale = apply(logitML[,c(18:29,31)], 2, max) - apply(logitML[,c(18:29,31)], 2, min)))
+
+c0_recomend = as.numeric(logitML$c0_recomend)
+data = cbind(c0_recomend,padron)
+
 split = sample.split(data$c0_recomend, SplitRatio = 0.80)
 train = subset(data, split == TRUE)
 test = subset(data, split == FALSE)
-vars <- names(scaled)
+vars <- names(padron)
 
 for (i in c(1,7)){
   print(which(names(test)==vars[i]))}
@@ -36,5 +35,5 @@ weights<-predicted.nn.values$neurons
 par(mfrow=c(1,1))
 par(mar=c(4, 2, 2, 2))
 
-### Requires Quartz
+### Requires Quartz to plot
 plot(nn)
