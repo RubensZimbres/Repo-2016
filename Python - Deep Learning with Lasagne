@@ -20,9 +20,9 @@ x2=[]
 for i in range (0,98):
     x2.append([x[18][i],x[19][i]])
 
-# convert class vectors to binary class matrices
+
 target=y
-# convert to array, specify data type, and reshape
+
 target = np.array(y).astype(np.uint8)
 train = np.array(x2).astype(np.float32)
 test = np.array(x2).astype(np.float32)
@@ -40,7 +40,7 @@ def build_mlp(input_var):
     
 input_var = T.fmatrix('inputs')
 target_var = T.ivector('targets')
-# Create neural network model
+
 network = build_mlp(input_var)
 prediction = lasagne.layers.get_output(network,deterministic=True)
 
