@@ -69,9 +69,9 @@ R - H2O Deep Learning	is a Neural Network model developed to predict recommendat
 
 R - MNIST	is a solution for the MNIST dataset, developed from scratch.
 
-R - Markov Chains	is a simple visualization of Markeov Chains and probabilities associated.
+R - Markov Chains	is a simple visualization of Markov Chains and probabilities associated.
 
-R - NeuralNet	is a Neural Network model deveoped to predict and classify word-of-mouth advertising.
+R - NeuralNet	is a Neural Network model developed to predict and classify word-of-mouth advertising.
 
 R - Ridge Regression is a model with Ridge Regularization made from scratch to prevent overfitting.
 
