@@ -59,7 +59,7 @@ R - Data Cleaning + Multinomial Regression:	is a model that presents data cleani
 
 R - Face Recognition:	is a code to detect faces and objects in R.
 
-R - Geolocation:	is a file for geo-spatial localization.
+R - Geolocation Brazil:	is a file for geo-spatial localization, brazilian map.
 
 R - Geolocation USA:	is also a file for geo-spatial localization, USA map.
 
