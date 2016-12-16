@@ -2,15 +2,22 @@ Welcome to my GitHub page.
 
 I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you will find some Machine Learning, Deep Learning, Natural Language Processing and Artificial Intelligence models I developed:
 
+------------------
+MATHEMATICA CODES:
+
 MNIST_HOT.5.FULL	is a solution for the MNIST dataset in Mathematica, with 96.54 accuracy, based on difference of pixels.
 
 Mathematica - Artificial Intelligence Simulating Interactions in Social Networks	is a model that simulates human interactions in a social network using cellular automata and agent-based modeling. Each agent has 3 possible choices for interation. The code has 14 pages.
 
 Mathematica - Social Network Surveillance	is a model that tracks individuals in a social network and predicts future connections.
 
+
+------------------
+PYTHON CODES:
+
 Python - Autoencoder MNIST	is an autoencoder model for classiciaftion of images, in this case, the MNIST dataset.
 
-Python - Autoencoder for Text Classification	is an autoencoder model for classiciaftion of text.
+Python - Autoencoder for Text Classification	is an autoencoder model for classification of text.
 
 Python - Deep Learning with Lasagne	is a deep neural network developed with Lasagne.
 
@@ -41,6 +48,10 @@ Python - Social Networks	is a model that draws social networks configuration and
 Python - Support Vector Machines	is a Machine Learning model that classifies the Iris dataset
 
 Python - Theano Deep Learning	is a Neural Network with two hidden layers
+
+
+------------------
+R CODES:
 
 R - Churn of Customers is a model that uses a logistic regression associated with a threshold to predict which customers present the greater risk to be lost.
 
