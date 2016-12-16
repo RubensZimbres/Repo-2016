@@ -75,5 +75,6 @@ R - NeuralNet:	is a Neural Network model developed to predict and classify word-
 
 R - Ridge Regression: is a model with Ridge Regularization made from scratch to prevent overfitting.
 
+R - Deep Learning is a Neural Network model with 3 hidden layers for prediction of a continuous variable.
 
 For examples of the outputs of these models, access my Portfolio at: http://www.slideshare.net/RubensZimbres/my-portfolio-77-dec-2016
