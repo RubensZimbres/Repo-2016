@@ -1,0 +1,43 @@
+FACIAL RECOGNITION IN MOVEMENT
+
+VIDEO OF THE OUPUT:
+https://www.youtube.com/watch?v=jcSbMFNcMOc
+
+CODE:
+
+Clear["Global`*"]
+SetDirectory[$UserDocumentsDirectory];
+jen=Import["Jennifer0.mov","ImageList"];
+
+ahj=ColorConvert[jen[[#]],"Grayscale"]&/@Table[k,{k,1,Dimensions[jen][[1]],1}];
+zt[uu_]:={HighlightImage[ahj[[uu]],Graphics[{
+
+EdgeForm[{White,Thick}],Opacity[0],Rectangle@@@FindFaces[ahj[[uu]]],
+
+Opacity[1],
+
+Inset[VerticalGauge[img2=Flatten[{ImageResize[ImageTrim[ahj[[uu]],#],{80,80}]&/@FindFaces[ahj[[uu]]],e3}];
+
+st008=ImageCorrespondingPoints[img2[[Dimensions[img2][[1]]]],ImageAdjust[img2[[#]],{.132,-.3,.56}],KeypointStrength->.001,MaxFeatures->50,TransformationClass->"Perspective"]&/@Table[k,{k,1,Dimensions[img2][[1]],1}]/.{}->{{0.,0.}};sd=EuclideanDistance[RegionCentroid[Point[Last[st008][[1]]]],RegionCentroid[Point[st008[[#]][[1]]]]]&/@Table[k,{k,1,Dimensions[img2][[1]],1}];so=EuclideanDistance[sd[[#]],Last[sd]]&/@Table[k,{k,1,Dimensions[img2][[1]],1}];te2=Position[Drop[so,-1],x_/;x<9];
+
+If[te2=={},.6,(100-Min[Drop[so,-1]])/100],{0,1},AxesStyle->Gray,LabelStyle->Directive[Black,Bold],GaugeLabels->Placed["MATCH",Bottom],GaugeFaceStyle->If[te2=={},Red,Green],GaugeFrameStyle->If[te2=={},Red,Green],GaugeStyle->Directive[If[te2=={},Black,Red],EdgeForm[Black]],GaugeLabels ->Placed["Value",Right],ScaleRanges->If[te2=={},{{0,.3}->White,{.3,.7}->LightGray,{.7,1}->Gray},{{0,.3}->White,{.3,.7}->LightGray,{.7,1}->Gray}]],{1110,200}],
+
+
+Inset[Grid[Transpose[{ImagePad[ImageResize[ImageTrim[ahj[[uu]],#],{80,80}],2,Black]&/@FindFaces[ahj[[uu]]]}],Background->None],{80,300}],
+
+Inset[Grid[{{ImagePad[ImageResize[ImageTrim[d0,FindFaces[d0][[1]]],{80,80}],2,Red]}}],{1110,480}],
+
+Inset[Text[Style[Grid[{{"SUBJECT"}},Frame->Red],Red,Bold,Medium,FontFamily->"Helvetica",30]],{1110,550}],
+
+If[te2=={},{},Inset[Text[Style["MATCH !",Green,Bold,Medium,FontFamily->"Helvetica",30]],{1110,380}]],
+
+Inset[Text[Style["rubenszmm@gmail.com",Black,Medium,FontFamily->"Helvetica",17]],{1000,35}],
+
+If[te2=={},{},{EdgeForm[{Red,Thick}],Opacity[0.15],Rectangle@@@{FindFaces[ahj[[uu]]][[te2[[1]][[1]]]]}}]
+
+}]]};
+add=Flatten[zt/@{1,30}]
+
+Export["INFO_10GREAT.mov",add]
+(100-Min[Drop[so,-1]])/100
+0.909062
