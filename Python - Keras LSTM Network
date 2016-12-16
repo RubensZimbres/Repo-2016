@@ -7,19 +7,16 @@ from keras.utils import np_utils
 from keras.layers.core import Dense, Activation,Dropout  
 from keras.callbacks import ModelCheckpoint
 import sys
-# load ascii text and covert to lowercase
+
 filename = "quantum.txt"
 raw_text = open(filename).read()
 raw_text = raw_text.lower()
-# create mapping of unique chars to integers
 chars = sorted(list(set(raw_text)))
 char_to_int = dict((c, i) for i, c in enumerate(chars))
-# summarize the loaded data
 n_chars = len(raw_text)
 n_vocab = len(chars)
 print("Total Characters: ", n_chars)
 print("Total Vocab: ", n_vocab)
-# prepare the dataset of input to output pairs encoded as integers
 
 seq_length = 100
 dataX = []
@@ -31,22 +28,12 @@ for i in range(0, n_chars - seq_length, 1):
 	dataY.append(char_to_int[seq_out])
 n_patterns = len(dataX)
 print("Total Patterns: ", n_patterns)
-# reshape X to be [samples, time steps, features]
 
 X = numpy.reshape(dataX, (n_patterns, 1, 100))
-# normalize
-X.shape
 X = X / float(n_vocab)
-X.shape
-X[0]
-# one hot encode the output variable ??????
 y = np_utils.to_categorical(dataY)
-# define the LSTM model
 y=dataY
-len(y)
 y = np_utils.to_categorical(dataY)
-# define the LSTM model
-y.shape
 
 model = Sequential()
 model.add(LSTM(100, 10, return_sequences=True))  
@@ -56,8 +43,6 @@ model.add(Activation("softmax"))
 model.compile(loss="categorical_crossentropy", optimizer="rmsprop")  
 
 model.fit(X, y, nb_epoch=10, batch_size=600)
-
-
 
 int_to_char = dict((i, c) for i, c in enumerate(chars))
 
@@ -81,4 +66,4 @@ for i in range(40):
     s.append(result)
     print("".join(s))
 
-### Code adapted from: http://machinelearningmastery.com for keras 1.1.0
+### Code adapted from: http://machinelearningmastery.com for keras 0.2.0
