@@ -71,7 +71,6 @@ inputs = x2
 exp_y = np.array(y) 
 
 z=[]
-# AQUI AVALIA OS TENSORES
 for i in range(epochs):
     for k in range(len(inputs)):
         cur_cost = cost(inputs[k], exp_y[k]) 
@@ -89,4 +88,4 @@ w0=[]
 for i in range (0,98):
     w0.append(predict([x[18][i],x[30][i]]))
 
-print('Accuracy=',1-np.mean(abs(np.array(y)-w0)))
+print('Accuracy=',1-np.mean(abs(np.array(y)-w0))) 
