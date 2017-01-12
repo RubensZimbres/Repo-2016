@@ -1,4 +1,4 @@
-set.seed(1)
+set.seed(100)
 k<-sample(seq(from = 1, to = 5, by = 1), size = 10, replace = TRUE)
 edges0<-c(k[-1],c(k[-10:-2]))
 require(DiagrammeR)
