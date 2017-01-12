@@ -1,6 +1,8 @@
-<b> Welcome to my GitHub page. </b>
+<b> Welcome to my GitHub repo. </b>
 
-I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you will find some Machine Learning, Deep Learning, Natural Language Processing and Artificial Intelligence models I developed:
+I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you will find some Machine Learning, Deep Learning, Natural Language Processing and Artificial Intelligence models I developed.
+
+<b> Outputs of the models can be seen at my portfolio: </b> http://www.slideshare.net/RubensZimbres/portfolio-78-en-2017
 
 ------------------
 <b>MATHEMATICA CODES </b>
@@ -80,5 +82,3 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 <b> R - Ridge Regression: </b> is a model with Ridge Regularization made from scratch to prevent overfitting.
 
 <b> R - Deep Learning: </b> is a Neural Network model with 2 hidden layers for prediction of a continuous variable.
-
-For examples of the outputs of these models, access my Portfolio at: http://www.slideshare.net/RubensZimbres/my-portfolio-77-dec-2016
