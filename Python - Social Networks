@@ -7,6 +7,7 @@ import pydot_ng as pydot
 from graphviz import Digraph
 import numpy as np
 import pandas as pd
+
 z0=pd.read_csv('edges2000.csv',sep=',',header=1)
 zb=[]
 for i in range(0,2090):
