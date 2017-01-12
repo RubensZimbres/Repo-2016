@@ -1,4 +1,5 @@
 Clear["Global`*"]
+
 SetDirectory[$UserDocumentsDirectory];
 
 gr=Import["Social_Network.Data.xlsx"][[1]];
