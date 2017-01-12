@@ -1,7 +1,8 @@
 library(h2o)
 h2o.init()
 setwd("/Volumes/16 DOS/R_nbs")
-train<-h2o.importFile("mnist_train2.csv")
+
+train<-h2o.importFile("mnist_train2.csv") 
 test<-h2o.importFile("mnist_test2.csv")
 target=t(train)[1,]
 target1<-as.h2o(target)
