@@ -3,6 +3,7 @@ require(nnet)
 require(ggplot2)
 require(reshape2)
 setwd("/Volumes/16 DOS/R_nbs")
+
 m<-read.csv("DadosTeseLogit3.csv",sep=",",header=TRUE,fileEncoding="latin1")
 head(m,2)
 with(m,table(c0_dados,selected))
@@ -32,5 +33,5 @@ pred
 m$selected[1:9]
 as.numeric(pred)
 cc<-as.numeric(pred)-as.numeric(m$selected[1:9])
-cc
-length(which(cc==0))/length(cc)
+
+accuracy=length(which(cc==0))/length(cc)
