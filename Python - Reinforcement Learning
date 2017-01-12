@@ -8,9 +8,11 @@ b=1
 
 stratA=[int(x) for x in np.random.rand(80)*2+1]
 stratB=[int(x) for x in np.random.rand(80)*2+1]
+
 ### SE GANHA
 np.array(stratA)-np.array(stratB)
 
+## PAYOFF MATRIX
 for i in range(0,len(stratA)):
     if stratA[i]==1 & stratB[i]==1:
         rewardA.append(0)
