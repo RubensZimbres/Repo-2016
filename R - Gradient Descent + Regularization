@@ -3,6 +3,7 @@ rm(list=ls())
 library(parallel)
 library(lattice)
 attach(mtcars)
+
 par(mfrow=c(1,1)) 
 setwd("/Volumes/16 DOS/R_nbs")
 sampleML<-read.csv("GameR.csv",sep=",",header=TRUE)
@@ -10,6 +11,7 @@ sum(is.na(sampleML[,3]))
 dim(sampleML)
 library(ggplot2)
 data<-sampleML[1:2800,]
+
 library(lattice)
 attach(mtcars)
 par(mfrow=c(2,2)) 
@@ -33,7 +35,7 @@ head(data)
 
 x3<-data[with(data,order(x1)),]
 
-library(lattice)
+library(lattice) 
 attach(mtcars)
 par(mfrow=c(1,1)) 
 plot(y~x2,data=sampleML)
