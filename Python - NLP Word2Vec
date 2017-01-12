@@ -39,6 +39,7 @@ print("KNN Similarity with Man")
 for i in range(0,5):
     print(names[i],":",1-plt.mlab.dist(DATA[i],DATA[1]))
 print("")
+
 c=[]
 for i in range(0,5):
     c.append(np.sqrt(DATA[i][2]**2+DATA[i][3]**2))
