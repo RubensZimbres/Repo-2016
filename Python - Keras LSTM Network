@@ -41,7 +41,6 @@ model.add(LSTM(10, 10))
 model.add(Dense(10, 42))
 model.add(Activation("softmax"))  
 model.compile(loss="categorical_crossentropy", optimizer="rmsprop")  
-
 model.fit(X, y, nb_epoch=10, batch_size=600)
 
 int_to_char = dict((i, c) for i, c in enumerate(chars))
