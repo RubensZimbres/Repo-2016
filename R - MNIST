@@ -1,11 +1,10 @@
 closeAllConnections()
 rm(list=ls())
-library(rJava)
-.jinit(classpath="myClasses.jar", parameters="-Xmx2048m")
-options( java.parameters = "-Xmx1024m" )
+
 setwd("/Volumes/16 DOS/R_nbs")
 train<-read.csv("mnist_train2.csv",sep=",",header=FALSE)
 test<-read.csv("mnist_test2.csv",sep=",",header=FALSE)
+ 
 t<-1
 p<-c()
 r<-c()
