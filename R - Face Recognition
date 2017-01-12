@@ -31,8 +31,7 @@ get.centers <- function(im,thr="98%",sigma=6*scl,bord=400){
 par(mfrow=c(1,1))
 plot(log(cim_FUNC+.1))
 par(mfrow=c(1,2))
-plot(cim)
-plot(cim)
+plot(cim) 
 
 kp=as.data.frame(cim %>% get.centers(sigma=3*scl,"98%"))[,2:3]
 kp %$% points(mx,my,col="yellow",pch=18)
