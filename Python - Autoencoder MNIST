@@ -31,7 +31,7 @@ encoded_imgs = encoder.predict(x_test)
 decoded_imgs = decoder.predict(encoded_imgs)
 import matplotlib.pyplot as plt
 
-n = 1  # how many digits we will display
+n = 1 
 plt.figure(figsize=(20, 4))
 for i in range(n):
     # display original
