@@ -24,7 +24,7 @@ x_train=np.array(zz)
 x_train = x_train.astype('float32')
 x_train=x_train/float(n_vocab)
 
-encoding_dim = 3  # 32 floats -> compression of factor 24.5, assuming the input is 784 floats
+encoding_dim = 3
 input_img = Input(shape=(200,))
 encoded = Dense(encoding_dim, activation='relu')(input_img)
 decoded = Dense(200, activation='sigmoid')(encoded)
