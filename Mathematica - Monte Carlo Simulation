@@ -3,8 +3,7 @@ MARKOV CHAIN MONTE CARLO SIMULATION - AUTONOMOUS DRIVING
 VIDEO OF THE OUTPUT:
 https://www.youtube.com/watch?v=_2l6DgUgGFw
 
-Table[Insert[Table[0,{5}],1,RandomInteger[{1,5}]],{15}];
-a={{0,0,0,0,1,0},{0,1,0,0,0,0},{0,0,1,0,0,0},{0,0,0,1,0,0},{0,1,0,0,0,0},{0,0,0,0,1,0},{0,0,0,1,0,0},{0,1,0,0,0,0},{0,1,0,0,0,0},
+a=Table[Insert[Table[0,{5}],1,RandomInteger[{1,5}]],{15}];
 b=Partition[Flatten[Position[a[[#]],0]&/@Table[k,{k,1,Dimensions[a][[1]],1}]],5]
 
 MONTE CARLO TREE SEARCH: RANDOM EXAMPLE;CLOCK;
