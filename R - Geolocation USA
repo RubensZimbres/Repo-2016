@@ -4,16 +4,19 @@ library(foreign)
 library(mapproj)
 library(ggplot2)
 setwd("/Volumes/16 DOS/R_nbs")
+ 
 accidents<-read.dbf("accident.dbf")
 head(accidents)
 accidents <- subset(accidents, LONGITUD!=999.99990 &  LONGITUD!=888.88880 & LONGITUD!=777.77770)
 which(names(accidents)=="RAIL")
 str(accidents[,-c(23,24,41)])
 hist(accidents$FATALS,col="green")
+
 # REMOVE ALASKA HAWAII
 cont_us_accidents<-subset(accidents, STATE!=2 & STATE!=15)
 county_map_data<-map_data("county")
 state_map <- map_data("state")
+
 ggplot() + 
   #Add county borders:
   geom_polygon(data=county_map_data, aes(x=long,y=lat,group=group), 
