@@ -7,7 +7,7 @@ head(logitML)
 summary(logitML)
 head(logitML,2)
 sum(is.na(logitML[,2]))
-apply(is.na(logitML),2,sum)
+apply(is.na(logitML),2,sum) 
 
 unique(logitML$Avaliação.de.desempenho)
 c(unique(logitML$Avaliação.de.desempenho))
