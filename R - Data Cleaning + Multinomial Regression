@@ -10,7 +10,7 @@ head(logitML)
 summary(logitML)
 head(logitML,2)
 sum(is.na(logitML[,2]))
-apply(is.na(logitML),2,sum)
+apply(is.na(logitML),2,sum) 
 
 unique(logitML$Avaliação.de.desempenho)
 c(unique(logitML$Avaliação.de.desempenho))
@@ -36,7 +36,7 @@ logitML$Turnover.mercado<-as.numeric(gsub("\\,",".",factor(logitML$Turnover.merc
 head(logitML$Salário.mensal.médio)
 head(factor(logitML$Salário.mensal.médio))
 f1<-gsub('[R$ ]','',factor(logitML$Salário.mensal.médio))
-head(f1)
+
 head(f2<-gsub("\\.","",f1))
 logitML$Salário.mensal.médio<-as.factor(f2)
 names(logitML)
