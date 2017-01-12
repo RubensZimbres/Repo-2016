@@ -20,7 +20,6 @@ x2=[]
 for i in range (0,98):
     x2.append([x[18][i],x[19][i]])
 
-
 target=y
 
 target = np.array(y).astype(np.uint8)
