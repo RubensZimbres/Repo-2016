@@ -76,7 +76,6 @@ y_train2=[item for sublist in y2 for item in sublist]
 y_train20=pd.get_dummies(y_train2)
 y_train2=np.array(y_train20)
 y_test=pd.DataFrame(y_train2).values
-y_test.shape
 
 x0=np.array(df2)
 x10=x0.T
