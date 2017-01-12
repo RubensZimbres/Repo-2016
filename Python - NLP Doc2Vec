@@ -25,7 +25,6 @@ for string in soup.stripped_strings:
     texto.append(repr(string))
 
 text = soup.get_text()
-text
 
 sentences = sent_tokenize(text)
 sentences2=sentences[20:100]
