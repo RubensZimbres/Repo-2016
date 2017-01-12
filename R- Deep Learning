@@ -6,7 +6,8 @@ logitML<-logitML[1:192,]
 library(ISLR)
 library(neuralnet)
 library(caTools)
-set.seed(500)
+
+set.seed(1500)
 
 padron <- as.data.frame(scale(logitML[,c(18:29,31)],center = apply(logitML[,c(18:29,31)], 2, min), scale = apply(logitML[,c(18:29,31)], 2, max) - apply(logitML[,c(18:29,31)], 2, min)))
 
