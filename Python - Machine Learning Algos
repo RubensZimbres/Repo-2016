@@ -1,0 +1,164 @@
+'''7 MACHINE LEARNING ALGORITHMS FOR CLASSIFICATION TASK - 3 CLASSES - IRIS DATASET'''
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import datasets
+iris = datasets.load_iris()
+x = iris.data[:, 2:][0:140]
+y = iris.target[0:140]
+x_test = iris.data[:, 2:][141:150]
+y_test = iris.target[141:150]
+
+x[np.argsort(x[:, 1])]
+y[np.argsort(y)]
+
+'''NAIVE BAYES'''
+
+from sklearn.naive_bayes import GaussianNB
+model1=GaussianNB()
+model1.fit(x,y)
+nb=model1.score(x,y)
+
+pred=model1.predict(x)
+t1=sum(x==0 for x in pred-y)/len(pred)
+
+'''DECISION TREES'''
+
+from sklearn import tree
+model2=tree.DecisionTreeClassifier(
+class_weight= None,
+criterion= 'entropy',
+max_depth= 20,
+max_features= x.shape[1],
+max_leaf_nodes= 4,
+min_samples_leaf= 1,
+min_samples_split= 1,
+min_weight_fraction_leaf= 0.0,
+presort= False,
+random_state= None,
+splitter= 'best')
+
+model2.fit(x,y)
+dt=model2.score(x,y)
+pred=model2.predict(x_test)
+t2=sum(x==0 for x in pred-y_test)/len(pred)
+
+'''BOOSTING'''
+
+from sklearn.ensemble import GradientBoostingClassifier
+model3=GradientBoostingClassifier(
+init= None,
+learning_rate= 0.6,
+loss= 'deviance',
+max_depth= 5,
+max_features= x.shape[1],
+max_leaf_nodes= 4,
+min_samples_leaf= 1,
+min_samples_split= 1,
+min_weight_fraction_leaf= 0.0,
+n_estimators= 1000,
+presort= 'auto',
+random_state= None,
+subsample= 1.0,
+verbose=1,
+warm_start= False)
+
+model3.fit(x,y)
+boo=model3.score(x,y)
+pred=model3.predict(x_test)
+t3=sum(x==0 for x in pred-y_test)/len(pred)
+
+'''K NEAREST NEIGHBOR'''
+
+from sklearn.neighbors import KNeighborsClassifier
+model4=KNeighborsClassifier(
+n_neighbors=3,
+algorithm= 'auto',
+leaf_size= 30,
+metric= 'minkowski',
+metric_params= None,
+n_jobs= 1,
+p= 2,
+weights= 'uniform')
+
+model4.fit(x,y)
+knn=model4.score(x,y)
+pred=model4.predict(x_test)
+t4=sum(x==0 for x in pred-y_test)/len(pred)
+
+'''MULTINOMIAL LOGISTIC REGRESSION'''
+
+from sklearn.linear_model import LogisticRegression
+model5=LogisticRegression(
+C= 1.0,
+class_weight= 'balanced',
+dual= False,
+fit_intercept= True,
+intercept_scaling= 1,
+max_iter= 50000,
+multi_class= 'multinomial',
+n_jobs= 2,
+penalty= 'l2',
+random_state= None,
+solver= 'newton-cg',
+tol= 0.0001,
+verbose= 1,
+warm_start= False)
+
+model5.fit(x,y)
+log=model5.score(x,y)
+pred=model5.predict(x_test)
+t5=sum(x==0 for x in pred-y_test)/len(pred)
+
+'''SUPPORT VECTOR MACHINES'''
+
+from sklearn import svm
+model6=svm.SVC(
+C= 1.0,
+cache_size= 10,
+class_weight= None,
+coef0= 0.0,
+decision_function_shape= None,
+degree= 3,
+gamma= 100,
+kernel= 'rbf',
+max_iter= -1,
+probability= True,
+random_state= None,
+shrinking= True,
+tol= 0.001,
+verbose=1)
+
+model6.fit(x,y)
+svm_=model6.score(x,y)
+pred=model6.predict(x_test)
+t6=sum(x==0 for x in pred-y_test)/len(pred)
+
+'''RANDOM FORESTS'''
+
+from sklearn.ensemble import RandomForestClassifier
+model7=RandomForestClassifier(
+bootstrap= True,
+class_weight= None,
+criterion= 'gini',
+max_depth= 100,
+max_features=x.shape[1],
+max_leaf_nodes=100,
+min_samples_leaf= 1,
+min_samples_split= 1,
+min_weight_fraction_leaf= 0,
+n_estimators= 100,
+n_jobs= 1,
+oob_score= False,
+random_state= None,
+verbose= 1,
+warm_start=True)
+ 
+model7.fit(x,y)
+rand=model7.score(x,y)
+pred=model7.predict(x_test)
+t7=sum(x==0 for x in pred-y_test)/len(pred)
+
+ss2=[nb,dt,boo,knn,log,svm_,rand]
+ss2
