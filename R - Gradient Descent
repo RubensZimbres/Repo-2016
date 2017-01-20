@@ -1,0 +1,149 @@
+closeAllConnections()
+rm(list=ls())
+library(parallel)
+library(lattice)
+attach(mtcars)
+par(mfrow=c(1,1)) 
+setwd("/Volumes/16 DOS/R_nbs")
+sampleML<-read.csv("GameR.csv",sep=",",header=TRUE)
+sum(is.na(sampleML[,3]))
+dim(sampleML)
+library(ggplot2)
+data<-sampleML[1:2800,]
+library(lattice)
+attach(mtcars)
+par(mfrow=c(2,2)) 
+plot(sort(data$x1))
+plot(sort(data$x2))
+plot(sort(data$y))
+
+par(mfrow=c(2,2))
+hist(data$x1,col="green")
+hist(data$x2,col="green")
+hist(data$y,col="red")
+
+cor(data)
+
+p1<-ggplot(data, aes(x=c(1:2800),y=sort(data$y)))+geom_point(size=0.8)
+p1
+p1 +geom_smooth(color="red")+
+    xlab("Label") +ylab("Percentage Completed Game") +
+    ggtitle(expression(atop("GAME DATA", atop(italic("Level of Gamer Success"), ""))))
+head(data)
+
+x3<-data[with(data,order(x1)),]
+
+library(lattice)
+attach(mtcars)
+par(mfrow=c(1,1)) 
+plot(y~x2,data=sampleML)
+abline(lm(y~x2,data=sampleML),col="red")
+boxplot(y~x2,data=sampleML[100:130,])
+hist(sampleML$y,data=sampleML$y)
+
+
+#Normal
+qqnorm(sampleML$y)
+qqline(sampleML$y,col="blue")
+shapiro.test(sampleML$y)
+
+#missing
+require(mice)
+md.pattern(sampleML)
+require(VIM)
+imputation<-mice(sampleML,m=5,maxit=10,method='pmm',seed=500)
+completeDataML<-complete(imputation,2)
+completeDataML
+  
+#outliers
+require(DMwR)
+outliers.score<-lofactor(completeDataML,k=5)
+outliers <- order(outliers.score, decreasing=T)[1:30]
+outliers
+delete=list(outliers)
+t<-c(outliers)
+filteredGame<-completeDataML[-t,]
+dim(completeDataML)
+dim(filteredGame)
+
+#Linear Regression
+x_train<-filteredGame[1:2000,1:2]
+y_train<-filteredGame[1:2000,3]
+x_test<-filteredGame[3500:4000,1:2]
+x<-cbind(x_train,y_train)
+y_train
+dim(x)
+linear<-lm(y_train~x_train[[1]]+x_train[[2]],data=filteredGame)
+summary(linear)
+
+# REAL ACERTO DO MODELO
+head(data)
+plot(sort(x_train[,2]),sort(y_train))
+points(sort(x_train[,2]),sort(fitted(linear)),pch=20,col="red")
+
+### ELASTIC NET ###
+aa<-seq(1,100,1)
+plot(log(aa))
+
+s<-c(seq(6,5,-0.001),seq(5,4,-0.001),seq(4,5,0.001),seq(5,4,-0.001),seq(4,0,-0.001))
+s1<-c(1:length(s))
+p<-ggplot()+geom_line(aes(x=s1,y=s+s^2-s^3+s^4))
+p
+lambda=0.01
+y7<-lambda*s+lambda*s^2-lambda*s^3+lambda*s^4
+y7
+ggplot()+geom_smooth(aes(x=s1,y=s+s^2-s^3+1.4*s^4),span=10)+
+  geom_smooth(aes(x=s1,y=s+2*s^2-0*s^3+.2*s^4),col="red",span=20)+
+  ggtitle("Gradient Descent - Regularization")+
+  xlab("Weight") +
+  ylab("Error")
+
+plot(s+s^2-s^3+s^4)
+
+library("lars")
+library("elasticnet")
+a=(cbind(x_train[,1],x_train[,2]))
+obj<-enet(a,y_train,lambda=3,max.steps=500)
+plot(obj,xvar="step",use.color = TRUE)
+options(scipen=999)
+names(obj)
+obj
+
+z<-filteredGame[1000:1500,]
+z1=cbind(c(1:501),sort(c$fit[,3]))
+z1[,2]
+c<-predict.enet(obj,z,type="fit")
+1-mean(abs(c$fit[,3]-y_train[1000:1500]))
+# ELASTIC NET
+ggplot(data=z,aes(x=c(1:501),y=sort(y_train[1000:1500])))+ geom_point(col="blue",size=2)+geom_line(aes(x=c(1:501),y=sort(c$fit[,3])),col="red",size=2)+geom_smooth(col="green")
+plot(c(1:501),sort(y_train[1000:1500]))
+points(c(1:501),sort(c$fit[,3]),pch=20,col="red")
+
+# LINEAR FIT
+ggplot(data=z,aes(x=c(1:501),y=sort(y_train[1000:1500])))+ geom_line(col="blue",size=2)+geom_line(aes(x=c(1:501),y=sort(fitted(linear)[1000:1500])),col="red",size=2)
+plot(c(1:501),sort(y_train[1000:1500]))
+points(c(1:501),sort(fitted(linear)[1000:1500]),pch=20,col="red")
+
+#######################
+
+x_train<-x_test
+y_train<-filteredGame[3500:4000,3]
+predicted<-predict(linear,newdata = data.frame(filteredGame[3500:4000,]))
+
+xx<-abs(predicted-filteredGame[3500:4000,3])
+accuracy=1-mean(xx)
+head(filteredGame)
+write.csv(predicted, "PredictedLinearOK.csv")
+
+library(lattice)
+attach(mtcars)
+par(mfrow=c(1,1)) 
+plot(filteredGame$y~filteredGame$x2,data=filteredGame,xlab="x1",ylab="y")
+abline(lm(filteredGame$y~filteredGame$x2,data=filteredGame),col="red",xlab="X1",lty=1)
+summary(linear)
+linear
+
+ggplot(data, aes(x=c(1:2800),y=sort(data$y)))+
+  geom_point(as.numeric(linear$fitted.values),aes(x=c(1:2800),y=sort(linear$fitted.values)),size=0.8)
+
+print(c("ACCURACY",accuracy))
