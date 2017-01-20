@@ -1,0 +1,174 @@
+closeAllConnections()
+rm(list=ls())
+library(parallel)
+setwd("/Volumes/16 DOS/R_nbs")
+sampleML<-read.csv("GameR.csv",sep=",",header=TRUE)
+head(sampleML)
+
+library(lattice)
+attach(mtcars)
+par(mfrow=c(1,1))
+plot(sort(sampleML[1:2879,3]))
+4053-sum(is.na(sampleML$y)==TRUE)
+plot(y~x2,data=sampleML)
+abline(lm(y~x2,data=sampleML),col="red")
+boxplot(y~x2,data=sampleML[100:130,])
+hist(sampleML$y,data=sampleML$y)
+
+#Normal
+qqnorm(sampleML$y)
+qqline(sampleML$y,col="blue",lty=1)
+shapiro.test(sampleML$y)
+
+#missing
+require(mice)
+md.pattern(sampleML)
+require(VIM)
+imputation<-mice(sampleML,m=5,maxit=10,method='pmm',seed=500)
+completeDataML<-complete(imputation,2)
+completeDataML
+  
+#outliers
+require(DMwR)
+outliers.score<-lofactor(completeDataML,k=50)
+outliers <- order(outliers.score, decreasing=T)[1:30]
+outliers
+delete=list(outliers)
+t<-c(outliers)
+filteredGame<-completeDataML[-t,]
+dim(completeDataML)
+dim(filteredGame)
+
+#Linear Regression
+x_train<-filteredGame[1:2700,1:2]
+y_train<-filteredGame[1:2700,3]
+x_test<-filteredGame[1:2700,1:2]
+x<-cbind(x_train,y_train)
+y_train
+
+cor(sampleML[1:2879,])
+par(mfrow=c(1,1))
+plot(x_train[[1]],y_train)
+plot(x_train[[2]],y_train)
+
+linear<-lm(y_train~x_train[[1]]+x_train[[2]]+I(x_train[[2]]^2),data=filteredGame)
+summary(linear)
+
+yy0<-c()
+for (i in seq(.6,2.5,0.001)){
+    yy0<-append(yy0,1-mean(abs(y_train-lm(y_train~x_train[[1]]+x_train[[2]]+I(x_train[[2]]^i),data=filteredGame)$fitted.values)),after=length(yy0))
+}
+max(yy0)
+which(yy0==max(yy0))
+coef0<-seq(.6,2.5,0.001)[[which(yy0==max(yy0))]]
+coef0
+
+linear<-lm(y_train~x_train[[1]]+x_train[[2]]+I(x_train[[2]]^coef0),data=filteredGame)
+summary(linear)
+
+hist(linear$residuals)
+1-mean(abs(linear$residuals))
+hist(log(x_train[[1]]))
+hist(log(x_train[[2]]))
+hist(log(y_train))
+
+# NON LINEAR REGRESSION WITH NORMAL DATA
+yy0<-c()
+for (i in seq(.6,2.5,0.001)){
+    yy0<-append(yy0,1-mean(abs(log(y_train)-lm(log(y_train)~log(x_train[[1]])+log(x_train[[2]])+I(log(x_train[[2]])^i),data=filteredGame)$fitted.values)),after=length(yy0))
+}
+max(yy0)
+which(yy0==max(yy0))
+coef0<-seq(.6,2.5,0.001)[[which(yy0==max(yy0))]]
+coef0
+
+# NON LINEAR ALL ADJUSTED
+# 0.71 para 0.76 R2
+linear2<-lm(log(y_train)~log(x_train[[1]])+log(x_train[[2]])+I(log(x_train[[2]])^coef0),data=filteredGame)
+summary(linear2)
+hist(linear2$residuals)
+names(linear2)
+
+
+accuracy<-1-mean(abs(log(y_train)-linear2$fitted.values))
+accuracy
+
+plot(log(y_train),linear2$fitted.values)
+barchart(linear2$coefficients)
+hist(linear2$residuals)
+
+### CERTO
+par(mfrow=c(1,1))
+ccc<-cbind(log(sampleML[1:2700,2]),log(sampleML[1:2700,3]),linear2$fitted.values)
+head(ccc)
+ddd<-setorder(data.frame(ccc))
+as.numeric(ddd[,2])
+plot(as.numeric(ddd[,1]),as.numeric(ddd[,2]),col="black",pch=20,xlab="Cases",ylab="Y")
+points(as.numeric(ddd[,1]),as.numeric(ddd[,3]),col="red",pch=20)
+
+sort(ccc,2,decreasing=FALSE)
+plot(sort(log(sampleML[1:2700,3])),col="black",pch=20,xlab="Cases",ylab="Y")
+points(sort(linear2$fitted.values),col="red",pch=20)
+
+# REGULARIZATION
+
+lambda=0.001
+linear2$coefficients1<-linear2$coefficients[1]-
+    lambda*sum((log(y_train)-linear2$fitted.values)^2)
+linear2$coefficients2<-linear2$coefficients[2]-
+    lambda*sum((log(y_train)-linear2$fitted.values)^2)
+linear2$coefficients3<-linear2$coefficients[3]-
+    lambda*sum((log(y_train)-linear2$fitted.values)^2)
+linear2$coefficients4<-linear2$coefficients[4]-
+    lambda*sum((log(y_train)-linear2$fitted.values)^2)
+
+bb<-linear2$coefficients[1]+linear2$coefficients2*log(x_train[[1]])+
+    linear2$coefficients3*log(x_train[[2]])+linear2$coefficients4*
+    log(x_train[[2]])^coef0
+bb
+par(mfrow=c(1,1))
+plot(sort(log(sampleML[1:2700,3]),decreasing=TRUE),col="black",pch=20,xlab="weight",ylab="Error")
+points(1+sort(bb,decreasing=TRUE),col="green",pch=20)
+
+library("ggplot2")
+p1<-ggplot(sampleML[1:2700,], aes(x=sort(log(sampleML[1:2700,3])),y=c(1:2700)),color="black")+geom_line(size=1.5)
+p1
+p1+geom_line(data=sampleML[1:2700,], aes(x=1+sort(bb),y=c(1:2700)),size=2,color="green")
+p1+geom_smooth(color="green")+
+  xlab("Error") +ylab("weight") +
+  ggtitle(expression(atop("Hill Climbing", atop(italic("Regularization"), ""))))
+
+x3<-log(sampleML[1:2700,2])
+y3<-log(sampleML[1:2700,3])
+c2<-ggplot(sampleML[1:2700,], aes(x3,y3))+geom_point()
+c2
+c2 + stat_smooth(method = "lm",color="red") + geom_point()
+
+# ANOVA
+#ANOVA
+fit <- aov(linear2, data=sampleML)
+summary(fit)
+
+
+# PREDICTION
+x_train<-filteredGame[1:500,1:2]
+x_train[[1]][x_train[[1]]==0]<-0.01
+y_train<-filteredGame[1:500,3]
+x<-cbind(x_train,y_train)
+y_train
+pred<-predict(linear2,newdata=x)
+
+# COMO TRANSFORMAR LOG EM NUMERO CERTO = ^10
+prev<-as.numeric(10^pred)
+
+pp<-prev+.26
+y_train-pp
+acc<-1-mean(abs(y_train-(prev+.26)))
+acc
+plot(y_train,pp)
+
+y_train
+write.csv(prev, "PredictedNonLinearOK.csv")
+print(c("ACCURACY",acc))
+
+hist(y_train-pp)
