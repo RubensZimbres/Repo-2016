@@ -73,6 +73,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> R - H2O Deep Learning: </b>	is a Neural Network model developed to predict recommendations and word-of-mouth advertising.
 
+<b> Logistic Regression + Gradient Descent + Boosting </b> is a model where features have no correlation with target variable. Logistic Regression with Gradient Descent was applied, and then Boosting.
+
 <b> R - MNIST: </b>	is a solution for the MNIST dataset, developed from scratch.
 
 <b> R - Markov Chains: </b>	is a simple visualization of Markov Chains and probabilities associated.
