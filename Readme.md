@@ -69,7 +69,7 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> R - Geolocation USA: </b>	is also a file for geo-spatial localization, USA map.
 
-<b> R - Gradient Descent Logistic: </b>	is a model that performs a gradient descent to define a threshold for the sigmoid funtion in a Logistic Regression. Boosting was implemented and ROC curves compared.
+<b> R - Gradient Descent Logistic: </b>	is a model that performs a gradient descent to define a threshold for the sigmoid function in a Logistic Regression. Boosting was implemented and ROC curves compared.
 
 <b> R - H2O Deep Learning: </b>	is a Neural Network model developed to predict recommendations and word-of-mouth advertising.
 
