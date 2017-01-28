@@ -1,3 +1,37 @@
 Data for models available at:
 
 https://drive.google.com/drive/folders/0B0RLknmL54khU2UwX3dnX1E1WHc?usp=sharing
+
+GUIDELINES:
+
+* <b> Accidents.dbf </b> is a file of traffic accidents in the USA with geolocation of data
+
+* <b> All_Starbucks_location.csv </b> is also a file with geolocation of Starbucks stores in the US
+
+* <b> Autoencoder_04767.hdf5 </b> is a weight file for the autoencoder model developed with Keras
+
+* <b> Brasil.shp </b> is a file with Brazil map, used in R file
+
+* <b> Collab.Filtering.csv Data is a file with a missing NaN value whose input is obtained through the Collaborative Filtering.py file
+
+* <b> DadosTeseLogit.csv is a file with 29 features and 2 target variables. Column 30 is a continuous variable used for regression models and
+column 31 is a binary variable, used for classification. Data was obtained in my Doctorate thesis, in a market research with 100
+people. Data presents low variance.
+
+* <b> DadosTeseLogit.csv is a file with 29 features and 2 target variables. Column 30 is a continuous variable used for regression models and
+column 31 is a variable with 3 classes, used for classification. Data was obtained in my Doctorate thesis, in a market research with 100
+people. Data presents low variance.
+
+* <b> Edges2000.csv is a file used for social network modeling, presenting connections from and to for 2000 individuals.
+
+* <b> EmailsData4.xlsx is a file used for social network modeling, presenting connections from and to, used in Mathematica model.
+
+* <b> GameR.csv is a file from the game sector used for non linear regression.
+
+* <b> haarcascade is a file used for OpenCV face recognition in Python.
+
+* <b> imdb.d2v is a file of movie reviews
+
+* <b> international-airline-passengers.csv is a file used for time series analysis
+
+* 
