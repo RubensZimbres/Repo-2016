@@ -57,11 +57,6 @@ y_test=np.array(pd.get_dummies(aa['Desligamento'][1801:1999]))
 X_train=np.array(aa.ix[:,2:14][0:1800])
 X_test=np.array(aa.ix[:,2:14][1801:1999])
 
-filepath="w-questao-{epoch:02d}-{loss:.4f}.hdf5"
-checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True)
-
-# Early stopping
-early_stopping = EarlyStopping(monitor='loss', verbose=1, patience=5)
 history=LossHistory()
 lrate=LearningRateScheduler(step_decay)
 
@@ -72,3 +67,5 @@ model.predict(X_train, batch_size=32, verbose=0)
 pred2=model.predict_classes(X_test, batch_size=32, verbose=0)
 
 print('Accuracy Test Set=',len(np.where(pred2-aa['Desligamento'][1801:1999]==0)[0])/198)
+
+''' Must apply a threshold to deal wih imbalanced classes'''
