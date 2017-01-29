@@ -68,32 +68,8 @@ lrate=LearningRateScheduler(step_decay)
 
 model.fit(X_train, y_train,nb_epoch=epochs,batch_size=100,callbacks=[history,lrate])
 
-filename = "weights-improvement-09-0.0010.hdf5"
-model.load_weights(filename)
-model.compile(loss='categorical_crossentropy', optimizer='adam')
-
 model.evaluate(X_train, y_train, batch_size=16)
 model.predict(X_train, batch_size=32, verbose=0)
-pred2=model.predict_classes(X_train, batch_size=32, verbose=0)
+pred2=model.predict_classes(X_test, batch_size=32, verbose=0)
 
-# THRESHOLD
-y2=np.array([int(i) for i in y])
-y2.shape
-y3=y2.reshape(60,30)
-plt.figure(figsize=(9,6))
-plt.imshow(y3)
-plt.title("REAL")
-plt.show()
-
-y22=np.array([int(i) for i in pred2])
-y22.shape
-y32=y22.reshape(60,30)
-plt.figure(figsize=(9,6))
-plt.imshow(y32)
-plt.title("PREDICTION")
-plt.show()
-
-b=[float(i) for i in history.losses]
-plt.plot(b,color='r',linewidth=3)
-plt.title("LOSS HISTORY")
-plt.show()
+print('Accuracy Test Set=',len(np.where(pred2-aa['Desligamento'][1801:1999]==0)[0])/198)
