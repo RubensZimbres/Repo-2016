@@ -13,7 +13,6 @@ learning_rate = 0.01
 decay_rate = 2e-6
 momentum = 0.9
 reg=0.001
-look_back = 23
 
 sd=[]
 class LossHistory(keras.callbacks.Callback):
