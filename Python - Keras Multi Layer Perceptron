@@ -41,7 +41,7 @@ def step_decay(losses):
         return lrate
 
 model = Sequential()
-model.add(Dense(6, input_dim=3, init=my_init))
+model.add(Dense(16, input_dim=12, init=my_init))
 model.add(Activation('tanh'))
 model.add(Dropout(0.5))
 model.add(Dense(2, init='uniform'))
@@ -51,40 +51,12 @@ model.compile(loss='categorical_crossentropy',
               optimizer=sgd,metrics=['accuracy'])
 
 aa=pd.read_csv('questao1NN.csv',sep=',',header=0)
-aa.head()
-aa[[1]]
-df=aa[0:1800]
-df2=aa[1801:1999]
-y=np.array(df[[1]])
-y_train=[item for sublist in y for item in sublist]
-y_train=pd.get_dummies(y_train)
-y_train=np.array(y_train)
-y_train=pd.DataFrame(y_train).values
 
-x=np.array(df)
-x1=x.T
-x1.shape
-for i in range(1,14):
-    x1[i]=np.array([float(i) for i in x1[i]])
+y_train=np.array(pd.get_dummies(aa['Desligamento'][0:1800]))
+y_test=np.array(pd.get_dummies(aa['Desligamento'][1801:1999]))
 
-[x1[2],x1[3],x1[4],x1[5],x1[6],x1[7],x1[8],x1[9],x1[10],x1[11],x1[12],x1[13],x1[14]]
-x2=[x1[6],x1[7],x1[9]]
-x3=np.array(x2).T
-X_train=x3
-X_train.shape
-
-y2=np.array(df2[[1]])
-y_train2=[item for sublist in y2 for item in sublist]
-y_train20=pd.get_dummies(y_train2)
-y_train2=np.array(y_train20)
-y_test=pd.DataFrame(y_train2).values
-y_test.shape
-
-x0=np.array(df2)
-x10=x0.T
-x20=[x10[1],x10[2]]
-x30=np.array(x20).T
-X_test=x30
+X_train=np.array(aa.ix[:,2:14][0:1800])
+X_test=np.array(aa.ix[:,2:14][1801:1999])
 
 filepath="w-questao-{epoch:02d}-{loss:.4f}.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True)
