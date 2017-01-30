@@ -4,6 +4,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Outputs of the models can be seen at my portfolio: </b> http://www.slideshare.net/RubensZimbres/portfolio-79-2017
 
+<img src=https://github.com/RubensZimbres/Repo-2016/blob/master/pictures/MNIST_FINAL.jpg?raw=true>
+
 ------------------
 <b>MATHEMATICA CODES </b>
 
