@@ -6,10 +6,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Outputs of the models can be seen at my portfolio: </b> http://www.slideshare.net/RubensZimbres/portfolio-79-2017
 
-<img src=https://github.com/RubensZimbres/Repo-2016/blob/master/pictures/MNIST_FINAL.jpg?raw=true>
-
 ------------------
-<b>MATHEMATICA CODES </b>
+# Mathematica Codes
 
 <b> MNIST_HOT.5.FULL:  </b>	is a solution for the MNIST dataset in Mathematica, with 96.51% accuracy, based on difference of pixels.
 
@@ -21,9 +19,11 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
   
 <b> Mathematica - Social Network Surveillance:  </b>	is a model that tracks individuals in a social network, tracks also his connections and future interactions.
 
+<img src=https://github.com/RubensZimbres/Repo-2016/blob/master/pictures/MNIST_FINAL.jpg?raw=true>
+
 
 ------------------
-<b>PYTHON CODES</b>
+# Python Codes
 
 <b> Python - Autoencoder MNIST:  </b>	is an autoencoder model for classification of images developed with Keras, for the MNIST dataset, with model Checkpoint as a callback to save weights.
 
@@ -62,7 +62,7 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 <img src=https://github.com/RubensZimbres/Repo-2016/blob/master/pictures/GENSIM_Word2Vec.jpg?raw=true>
 
 ------------------
-<b>R CODES</b>
+# R Codes
 
 <b> R - Churn of Customers: </b> is a model that uses a logistic regression associated with a threshold to predict which customers present the greater risk to be lost.
 
