@@ -1,0 +1,15 @@
+library("quantmod")
+getSymbols("^DJI")
+candleChart(DJI,subset="last 1 month",
+            theme='white', type='candles',up.col='green',
+            dn.col='red')
+chartSeries(DJI,theme="white",TA="addRSI();addVo();addMomentum()",
+            subset="last 6 months",up.col='green',
+            dn.col='red')
+names(DJI)
+x<-DJI$DJI.Open
+x1<-DJI$DJI.High
+x2<-DJI$DJI.Low
+y<-DJI$DJI.Close
+y2<-DJI$DJI.Volume
+head(cbind(x,x1,x2,y,y2),17)
