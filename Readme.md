@@ -80,6 +80,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> R - H2O Deep Learning: </b>	is a Neural Network model developed to predict recommendations and word-of-mouth advertising.
 
+<b> R - Imbalanced classes </b> is a model for employee churn, where features have no correlation with target variable and also there are imbalanced classes in the proportion 1/20. A logistic regression from scratch is applied, a hill climbing gradient is used to define the best threshold for the logistic function and after that, boosting was compared regarding AUC in a ROC plot.
+
 <b> Logistic Regression + Gradient Descent + Boosting </b> is a model where features have no correlation with target variable. Logistic Regression with Gradient Descent was applied, and then Boosting.
 
 <b> R - MNIST: </b>	is a solution for the MNIST dataset, developed from scratch.
