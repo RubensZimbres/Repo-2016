@@ -98,7 +98,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <p align="center">
 <img src=https://github.com/RubensZimbres/Repo-2016/blob/master/pictures/StockMarket.DOW.JONES.png?raw=true>
+</p>
 
+<p align="center">
 <img src=https://github.com/RubensZimbres/Repo-2016/blob/master/pictures/Geolocation.png?raw=true>
-
 </p>
