@@ -59,7 +59,9 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 
 <b> Python - Theano Deep Learning: </b>	is a Neural Network with two hidden layers using Theano.
 
+<p align="center">
 <img src=https://github.com/RubensZimbres/Repo-2016/blob/master/pictures/GENSIM_Word2Vec.jpg?raw=true>
+</p>
 
 ------------------
 # R Codes
