@@ -26,6 +26,8 @@ I am a Data Scientist and I code in R, Python and Wolfram Mathematica. Here you 
 ------------------
 # Python Codes
 
+Keras version used in models: keras==1.1.0 | LSTM 0.2
+
 <b> Python - Autoencoder MNIST:  </b>	is an autoencoder model for classification of images developed with Keras, for the MNIST dataset, with model Checkpoint as a callback to save weights.
 
 <b> Python - Autoencoder for Text Classification:  </b>	is an autoencoder model for classification of text made with Keras, also with model Checkpoint.
