@@ -1,0 +1,7 @@
+import folium
+
+map_1 = folium.Map(location=[45.5236, -122.6750])
+folium.Marker([45.3288, -122.6625], popup='Mt. Hood Meadows').add_to(map_1)
+folium.Marker([45.3311, -122.7113], popup='Timberline Lodge').add_to(map_1)
+map_1.save('Map_folium_5.html')
+
