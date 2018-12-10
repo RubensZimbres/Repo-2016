@@ -1,3 +1,8 @@
+install.packages('quantmod')
+#sudo apt-get install curl libcurl4-openssl-dev libssl-dev
+
+
+
 library("quantmod")
 getSymbols("^DJI")
 candleChart(DJI,subset="last 1 month",
